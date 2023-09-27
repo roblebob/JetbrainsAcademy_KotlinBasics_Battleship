@@ -1,5 +1,8 @@
 package battleship
 
+const val SYMBOL_EMPTY = '~'
+const val SYMBOL_SHIP = 'O'
+
 val SHIPS = mapOf(
     "Aircraft Carrier" to 5,
     "Battleship" to 4,
@@ -10,17 +13,57 @@ val SHIPS = mapOf(
 
 
 fun main() {
-
     Field.display()
 
-
+    // setup ships
     for (ship in SHIPS) {
         Field.enterShip(ship)
         println()
         Field.display()
     }
 
+    // play
+    println("\nThe game starts!\n")
+    Field.display()
+    println("\nTake a shot!\n")
 
+
+    ////////////////////////////
+
+
+
+
+
+    while (true) {
+        val p = readln()
+        // extract coordinates
+        val x = p[0] - 'A'
+        val y = p.substring(1).toInt() - 1
+
+        // check if coordinates are valid
+        if (x !in 0 until Field.N ||
+            y !in 0 until Field.N
+        ) {
+            println("\nError! You entered the wrong coordinates! Try again:\n")
+            continue
+        }
+
+        // check if cell is free
+        if (Field.field[x][y] == 'O') {
+
+            Field.field[x][y] = 'X'
+            Field.display()
+            println("\nYou hit a ship!")
+            break
+
+        } else {
+
+            Field.field[x][y] = 'M'
+            Field.display()
+            println("\nYou missed!")
+        }
+
+    }
 
 
 }
@@ -36,13 +79,7 @@ fun main() {
 
 object Field {
     val N = 10
-
-
-
     val field = Array(N) { Array(N) { '~' } }
-
-
-
 
 
     fun enterShip(ship: Map.Entry<String, Int>): Boolean  {
@@ -102,11 +139,11 @@ object Field {
             // write "~" into cells and their neighborhoods are free
             if (x0 == x1)  {
                 for (y in y0..y1) {
-                    field[x0][y] = 'O'
+                    field[x0][y] = SYMBOL_SHIP
                 }
             } else if (y0 == y1) {
                 for (x in x0..x1) {
-                    field[x][y0] = 'O'
+                    field[x][y0] = SYMBOL_SHIP
                 }
             }
 
@@ -118,12 +155,12 @@ object Field {
     }
 
 
-    fun neighborhoodFree(x: Int, y: Int): Boolean {
+    private fun neighborhoodFree(x: Int, y: Int): Boolean {
         for (i in -1..1) {
             for (j in -1..1) {
                 if (x + i in 0 until N &&
                     y + j in 0 until N &&
-                    field[x + i][y + j] != '~'
+                    field[x + i][y + j] != SYMBOL_EMPTY
                 ) {
                     //println("...... neighborhood is NOT free")
                     return false
