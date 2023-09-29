@@ -1,0 +1,13 @@
+<h2>What is the result?</h2>
+<div class="step-text">
+<p></p>
+<p>What will be output in a standard terminal?</p>
+<pre><code class="language-kotlin">val numbers = listOf(2, 5, 25, 1089, 4)
+val value = with(numbers) {
+    var numbers = this
+    this.drop(5)
+    numbers.lastOrNull()
+}
+
+println(value)</code></pre>
+</div>

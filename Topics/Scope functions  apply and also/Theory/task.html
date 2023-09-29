@@ -1,0 +1,101 @@
+<h2>Scope functions: apply and also</h2>
+<div class="step-text">
+<h5 id="introduction">Introduction</h5>
+<p>There is a lot of syntax sugar in Kotlin that allows you to make your code more readable and clear. One of the examples is <strong>scope functions</strong>. They organize code in convenient blocks and help to easily support it. In this topic, we will consider what scope functions are and how two of them, <code class="language-kotlin">apply</code> and <code class="language-kotlin">also</code>, work.</p>
+<h5 id="scope-functions">Scope functions</h5>
+<p>There are five scope functions in Kotlin: <code class="language-kotlin">let</code>, <code class="language-kotlin">run</code>, <code class="language-kotlin">with</code>, <code class="language-kotlin">apply</code>, and <code class="language-kotlin">also</code>. They don't perform any specific actions but just organize your code and execute certain operations in the object context. These functions create a temporary scope for objects and invoke code from lambdas. Inside a lambda, we can communicate with objects using the keywords <code class="language-kotlin">it</code> or <code class="language-kotlin">this</code> (we will consider them in the following topics).</p>
+<p>It sounds a little abstract, yes, but let's see an example – it will be simple and cool! We have a data class <code class="language-kotlin">Musician</code>, which contains some information about famous people: their names, the instrument they play, and the name of their bands. As we know, after the breakup of Nirvana, Dave Grohl founded the band Foo Fighters. He was a drummer first and then began to play the guitar. Now, we need to change our object accordingly. To do that, we will use one of the scope functions – <code class="language-kotlin">apply</code>.</p>
+<pre><code class="language-kotlin">data class Musician(var name: String, var instrument: String, var band: String)
+
+fun main() {
+    Musician("Dave Grohl", "Drums", "Nirvana").apply {
+        println(this)
+        band = "Foo Fighters"
+        instrument = "Guitar"
+        println(this)
+    }
+}
+// Output:
+// Musician(name=Dave Grohl, instrument=Drums, band=Nirvana)
+// Musician(name=Dave Grohl, instrument=Guitar, band=Foo Fighters)</code></pre>
+<p>Voila! Dave has successfully changed his characteristics: the band name and the musical instrument. And we got a clear and readable piece of code.</p>
+<p>Now let's see how this code would look without the scope function.</p>
+<pre><code class="language-kotlin">data class Musician(var name: String, var instrument: String, var band: String)
+
+fun main() {
+    val dave = Musician("Dave Grohl", "Drums", "Nirvana")
+    println(dave)
+    dave.band = "Foo Fighters"
+    dave.instrument = "Guitar"
+    println(dave)
+}</code></pre>
+<p>We see that without <code class="language-kotlin">apply</code> our code became heavier and received a new variable. Moreover, in the code with <code class="language-kotlin">apply</code>, we have operations conveniently grouped, while without <code class="language-kotlin">apply</code>, all operations are located on the same level. And if we add yet more operations, the code may become unreadable.</p>
+<p>Now, let's consider in details two scope functions – <code class="language-kotlin">apply</code> and <code class="language-kotlin">also</code> – and discuss how and where they work. You'll see that they are very similar.</p>
+<h5 id="apply">apply</h5>
+<p>Here are two major features of the <code class="language-kotlin">apply</code> function:</p>
+<ul>
+<li>
+<p>The context object is available as <code class="language-kotlin">this</code>.</p>
+</li>
+<li>
+<p>The function returns the context object.</p>
+</li>
+</ul>
+<p><code class="language-kotlin">apply</code> is commonly used for object setting – for example, if you want to assign new values to class methods or parameters. It sounds like "Hey, do apply these settings to this object and its parameters!". Note that in this case, you need to have access to object parameters.</p>
+<p>Do you remember Jonny Greenwood from Radiohead? Let's now enter his data!</p>
+<pre><code class="language-kotlin">data class Musician(var name: String, var instrument: String = "Guitar", var band: String = "Radiohead")
+
+fun main() {
+    Musician("Jonny Greenwood").apply {
+      instrument = "Harmonica" // here we can also use this.instrument
+      band = "Pavement"     
+    }
+}</code></pre>
+<p>We've changed the object and set some of Jonny's parameters – now he can play harmonica in Pavement's album "Terror Twilight" (1999). Such a talented guy!</p>
+<p>Note how we accessed the class parameters: we could have referred to them as <code class="language-kotlin">this.instrument</code>, but <code class="language-kotlin">this</code> can be skipped. And look how readable the code is – in its structure, we immediately see the block that applies new settings to an instance of the <code class="language-kotlin">Musician()</code> object.</p>
+<p>Remember that <code class="language-kotlin">apply</code> returns the context object. It means that we can pass our object further down the chain and do something else with it. For example, we can copy this object with some new parameters:</p>
+<pre><code class="language-kotlin">fun main() {
+    val thom = Musician("Jonny Greenwood")
+        .apply {
+            instrument = "Harmonica"
+            band = "Pavement"
+        }.copy(name = "Thom York") // After .apply we have an instance of Musician()
+}</code></pre>
+<h5 id="also">also</h5>
+<p>Here are two major characteristics of the <code class="language-kotlin">also</code> function:</p>
+<ul>
+<li>
+<p>The context object is available as <code class="language-kotlin">it</code>.</p>
+</li>
+<li>
+<p>The function returns the context object.</p>
+</li>
+</ul>
+<p>The usage of <code class="language-kotlin">also</code> is similar to that of <code class="language-kotlin">apply</code>, but it's recommended to choose <code class="language-kotlin">also</code> when you work with the entire object and don't care about its parameters or methods. It sounds like "Hey, now do something with this object and also (in that moment and as if before the main operation) perform an additional action". For example, imagine that our old Jonny decided to learn a new instrument:</p>
+<pre><code class="language-kotlin">val instruments = mutableListOf("Guitar", "Harmonica", "Bass guitar")
+
+instruments
+    .also { println("Right now I can play these instruments: $it") }
+    .add("Theremin")</code></pre>
+<p>We declare a variable, pass some value to it, and at the same time invoke the <code class="language-kotlin">println()</code> function using the <code class="language-kotlin">also</code> function.</p>
+<p>Meanwhile, <code class="language-kotlin">also</code> has an interesting feature – it seems like it executes operations immediately (actually, it returns the context before operations are executed). See how the trick works:</p>
+<pre><code class="language-kotlin">var a = 10
+var b = 5
+a = b.also { b = a }
+println("a = $a, b = $b") // Output: a = 5, b = 10</code></pre>
+<p>Great!</p>
+<h5 id="conclusion">Conclusion</h5>
+<p>We've learned five scope functions and taken a closer look at two of them – <code class="language-kotlin">also</code> and <code class="language-kotlin">apply</code>. Here is a little summary:</p>
+<ul>
+<li>
+<p>There are five scope functions in Kotlin, which help us to organize our code and do some job with objects.</p>
+</li>
+<li>
+<p>We have to use <code class="language-kotlin">apply</code> to set object parameters.</p>
+</li>
+<li>
+<p>We have to use <code class="language-kotlin">also</code> to do some additional things with objects.</p>
+</li>
+</ul>
+<p>In the next topic, we will consider the usage of <code class="language-kotlin">with</code>, <code class="language-kotlin">run</code>, and <code class="language-kotlin">let</code> – three functions that return lambda's results.</p>
+</div>

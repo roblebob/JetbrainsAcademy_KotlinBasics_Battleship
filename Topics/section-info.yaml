@@ -11,3 +11,5 @@ content:
   - Retrieve collection parts
   - Generic functions
   - Type Bounds
+  - Scope functions  apply and also
+  - "Scope functions  let, run, and with"
