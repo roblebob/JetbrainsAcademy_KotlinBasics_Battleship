@@ -1,0 +1,36 @@
+type: matching
+captions:
+  - mapIndexed()
+  - mapValues()
+  - mapNotNull()
+  - map()
+  - mapKeys()
+options:
+  - Transforms a given collection into a new collection by applying a transformation
+    lambda function to each element
+  - "Transforms the elements, and if this transformation cannot be performed, it filters\
+  \ out the null elements "
+  - Transforms the key elements of a collection of maps
+  - Transform the value elements of a collection of maps
+  - Transforms a given collection into a new collection by applying a transformation
+    lambda function to each element and using the index as the first argument of the
+    lambda.
+files:
+  - name: src/Main.kt
+    visible: true
+    text: |
+      // You can experiment here, it won’t be checked
+      
+      fun main(args: Array<String>) {
+        // put your code here
+      }
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/23781#comment
+status: Solved
+record: -1
+ordering:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4

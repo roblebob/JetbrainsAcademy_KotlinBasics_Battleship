@@ -1,0 +1,21 @@
+type: code
+files:
+  - name: src/Main.kt
+    visible: true
+    text: |-
+      fun processIterator(list: List<String>): List<String> {
+          // write your code
+      }
+      
+      fun main() {
+          var list = processIterator(readln().split(" "))
+          // output the list
+      }
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/20799#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Wed, 27 Sep 2023 17:41:08 UTC"
+record: -1
+submission_language: kotlin

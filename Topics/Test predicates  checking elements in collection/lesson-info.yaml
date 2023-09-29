@@ -1,0 +1,4 @@
+custom_name: "Test predicates: checking elements in collection"
+content:
+  - Theory
+  - Is it a palindrome list

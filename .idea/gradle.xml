@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="delegatedBuild" value="false" />
+        <option name="distributionType" value="WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/Battleship (Kotlin)/task" />
+            <option value="$PROJECT_DIR$/Battleship (Kotlin)/task/build/classes/java" />
+            <option value="$PROJECT_DIR$/Battleship (Kotlin)/task/build/generated/sources/annotationProcessor/java" />
+            <option value="$PROJECT_DIR$/Battleship (Kotlin)/task/build/generated/sources/headers/java" />
+            <option value="$PROJECT_DIR$/Battleship (Kotlin)/task/build/reports/tests" />
+            <option value="$PROJECT_DIR$/Battleship (Kotlin)/task/build/test-results" />
+            <option value="$PROJECT_DIR$/Battleship (Kotlin)/task/build/tmp" />
+            <option value="$PROJECT_DIR$/Topics/Aggregate operations on collections/Hacking the Matrix" />
+            <option value="$PROJECT_DIR$/Topics/Aggregate operations on collections/The Empire strikes back" />
+            <option value="$PROJECT_DIR$/Topics/Aggregate operations on collections/The right result of an aggregate function" />
+            <option value="$PROJECT_DIR$/Topics/Aggregate operations on collections/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Aggregate operations on collections/Which definition is correct" />
+            <option value="$PROJECT_DIR$/Topics/Extension functions/Definition" />
+            <option value="$PROJECT_DIR$/Topics/Extension functions/Delegation" />
+            <option value="$PROJECT_DIR$/Topics/Extension functions/Last digit" />
+            <option value="$PROJECT_DIR$/Topics/Extension functions/Overloading" />
+            <option value="$PROJECT_DIR$/Topics/Extension functions/Overriding member function" />
+            <option value="$PROJECT_DIR$/Topics/Extension functions/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Generic functions/Correct declaration" />
+            <option value="$PROJECT_DIR$/Topics/Generic functions/Guess what's in the box" />
+            <option value="$PROJECT_DIR$/Topics/Generic functions/More Kotlin" />
+            <option value="$PROJECT_DIR$/Topics/Generic functions/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Generic functions/Understanding generics" />
+            <option value="$PROJECT_DIR$/Topics/Generic functions/What is a generic function" />
+            <option value="$PROJECT_DIR$/Topics/Iterators/Comprehension" />
+            <option value="$PROJECT_DIR$/Topics/Iterators/Keep hyper" />
+            <option value="$PROJECT_DIR$/Topics/Iterators/Roller coasters" />
+            <option value="$PROJECT_DIR$/Topics/Iterators/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Mapping transformation/Harry and the Spell Power" />
+            <option value="$PROJECT_DIR$/Topics/Mapping transformation/Match functions and results" />
+            <option value="$PROJECT_DIR$/Topics/Mapping transformation/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Mapping transformation/Which definition is correct" />
+            <option value="$PROJECT_DIR$/Topics/Mutable Set/Bad egg" />
+            <option value="$PROJECT_DIR$/Topics/Mutable Set/Filter" />
+            <option value="$PROJECT_DIR$/Topics/Mutable Set/Little more and little less" />
+            <option value="$PROJECT_DIR$/Topics/Mutable Set/MutableSet properties" />
+            <option value="$PROJECT_DIR$/Topics/Mutable Set/Remove it all" />
+            <option value="$PROJECT_DIR$/Topics/Mutable Set/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Nested and inner classes/A bow and a cat" />
+            <option value="$PROJECT_DIR$/Topics/Nested and inner classes/Christmas tree" />
+            <option value="$PROJECT_DIR$/Topics/Nested and inner classes/Clothing problem" />
+            <option value="$PROJECT_DIR$/Topics/Nested and inner classes/Heroes and villains" />
+            <option value="$PROJECT_DIR$/Topics/Nested and inner classes/Nested or inner" />
+            <option value="$PROJECT_DIR$/Topics/Nested and inner classes/Pumpkin and candle" />
+            <option value="$PROJECT_DIR$/Topics/Nested and inner classes/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Nested and inner classes/Why do we need inner classes" />
+            <option value="$PROJECT_DIR$/Topics/Retrieve collection parts/Application" />
+            <option value="$PROJECT_DIR$/Topics/Retrieve collection parts/Hacking the Matrix" />
+            <option value="$PROJECT_DIR$/Topics/Retrieve collection parts/List of names" />
+            <option value="$PROJECT_DIR$/Topics/Retrieve collection parts/List of students' grades" />
+            <option value="$PROJECT_DIR$/Topics/Retrieve collection parts/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Retrieve collection parts/Which definition is correct" />
+            <option value="$PROJECT_DIR$/Topics/Set/Combinination" />
+            <option value="$PROJECT_DIR$/Topics/Set/Conversion" />
+            <option value="$PROJECT_DIR$/Topics/Set/First things first" />
+            <option value="$PROJECT_DIR$/Topics/Set/Subtraction" />
+            <option value="$PROJECT_DIR$/Topics/Set/Theory" />
+            <option value="$PROJECT_DIR$/Topics/String formatting/Format Double with a comma and 2 decimal digits" />
+            <option value="$PROJECT_DIR$/Topics/String formatting/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Test predicates  checking elements in collection/Is it a palindrome list" />
+            <option value="$PROJECT_DIR$/Topics/Test predicates  checking elements in collection/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Type Bounds/Checking mailbox" />
+            <option value="$PROJECT_DIR$/Topics/Type Bounds/Facts about type bounds" />
+            <option value="$PROJECT_DIR$/Topics/Type Bounds/Get bigger" />
+            <option value="$PROJECT_DIR$/Topics/Type Bounds/Lovely bounds" />
+            <option value="$PROJECT_DIR$/Topics/Type Bounds/Multiple bounds" />
+            <option value="$PROJECT_DIR$/Topics/Type Bounds/Theory" />
+            <option value="$PROJECT_DIR$/util" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

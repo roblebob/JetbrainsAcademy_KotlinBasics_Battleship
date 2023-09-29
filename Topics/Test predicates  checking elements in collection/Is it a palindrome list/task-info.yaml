@@ -1,0 +1,15 @@
+type: code
+custom_name: Is it a palindrome list?
+files:
+  - name: src/Main.kt
+    visible: true
+    text: "/* Do not change code below */\nfun main() {\n    val list = readln().split(\"\
+    \ \")\n    // write your code here\n    val res = \n\n\n    println(res)\n}"
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/22087#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Wed, 27 Sep 2023 17:52:38 UTC"
+record: -1
+submission_language: kotlin

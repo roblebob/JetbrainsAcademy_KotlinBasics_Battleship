@@ -1,0 +1,21 @@
+type: choice
+is_multiple_choice: true
+options:
+  - text: "By default, all type parameters are constrained by the type Any?"
+  - text: "When you use multiple bounds, the first type should be a class or an interface"
+  - text: We can use type bounds only with classes
+  - text: "If we have multiple bounds, at least one upper bound will be specified"
+files:
+  - name: src/Main.kt
+    visible: true
+    text: |
+      // You can experiment here, it won’t be checked
+      
+      fun main(args: Array<String>) {
+        // put your code here
+      }
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/21743#comment
+status: Solved
+record: -1
+local_check: false

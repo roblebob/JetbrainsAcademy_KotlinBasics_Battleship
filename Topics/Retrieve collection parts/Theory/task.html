@@ -1,0 +1,61 @@
+<h2>Retrieve collection parts</h2>
+<div class="step-text">
+<p>Working with collections is one of the most important tasks you will do as a developer. In previous topics, you have learned to select elements of a collection, order them, and even group them or transform according to your needs.</p><p>In this topic, we will explore some Kotlin methods that make getting collection elements easier and thus help you operate on them.</p><h5 id="slice">Slice</h5><p>Slicing is a fundamental operation: it returns a range of items from a collection based on their indices. </p><p>If you use the <code class="language-kotlin">slice()</code> method, you can get a new collection based on element indices that can be defined as a range or as a set of individual integers. The result will be a new collection – the elements with the given indices.</p><pre><code class="language-kotlin">fun main() {
+    val list = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+    // retrieve items from 1 to 5 using slice and range
+    println(list.slice(0..4)) // [1, 2, 3, 4, 5]
+    // retrieve items from 1 to 5 using range and step
+    println(list.slice(0..5 step 2)) // [1, 3, 5]
+    // retrieve items from 5 to 1 using range and step descending
+    println(list.slice(4 downTo 0 step 2)) // [5, 3, 1]
+    // retrieve items from 1 to 5 using only indices
+    println(list.slice(listOf(0, 2, 4))) // [1, 3, 5]
+}</code></pre><h5 id="take-and-drop">Take and drop</h5><p>Oftentimes, you need to get elements of a collection without using their indices. You can indicate how many elements to return from a collection using the family of the "take" methods:</p><ul><li><p><code class="language-kotlin">take()</code>: returns a collection with n elements from the original collection, starting from the first element. If called with a number larger than the collection size, the whole collection is returned.</p></li><li><p><code class="language-kotlin">takeLast()</code>: returns a collection with n elements from the original collection, starting from the last element. If called with a number larger than the collection size, the whole collection is returned.</p></li><li><p><code class="language-kotlin">takeWhile()</code>: returns a collection with the elements that satisfy the predicate, starting  from the first element. If none of the elements match the predicate, the result is an empty collection. </p></li><li><p><code class="language-kotlin">takeWhileLast()</code>: returns a collection with the elements that satisfy the predicate, starting  from the last element. If none of the elements match the predicate, the result is an empty collection. </p></li></ul><pre><code class="language-kotlin">fun main() {
+    val list = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+    // take 5 elements from the first
+    println(list.take(5)) // [1, 2, 3, 4, 5]
+    // take 5 elements from the last
+    println(list.takeLast(5)) // [6, 7, 8, 9, 10]
+    // take while the condition is true &lt; 5
+    println(list.takeWhile { it &lt; 5 }) // [1, 2, 3, 4]
+    // take last while the condition is true &gt; 5
+    println(list.takeLastWhile { it &gt; 5 }) // [6, 7, 8, 9, 10]
+}</code></pre><p>Sometimes, we want to take just a specific number of elements from a collection. For this task, the "drop" methods come in handy:</p><ul><li><p><code class="language-kotlin">drop()</code>: returns a collection containing all the elements except the first n elements. If called with a number larger than the collection size, an empty list is returned.</p></li><li><p><code class="language-kotlin">dropLast()</code>:  returns a collection containing all the elements except the last n elements. If called with a number larger than the collection size, an empty list is returned.</p></li><li><p><code class="language-kotlin">dropWhile()</code>: returns a collection containing all the elements except the first elements that satisfy the given predicate. If no elements match the predicate, the result is the original collection; if all of then match the predicate, an empty list is returned.</p></li><li><p><code class="language-kotlin">dropLastWhile()</code>: returns a collection containing all the elements except last elements that satisfy the given predicate. If no elements match the predicate, the result is the original collection; if all of then match the predicate, an empty list is returned. </p></li></ul><pre><code class="language-kotlin">fun main() {
+    val list = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+    // drop 5 elements from the first
+    println(list.drop(5)) // [6, 7, 8, 9, 10]
+    // drop 5 elements from the last
+    println(list.dropLast(5)) // [1, 2, 3, 4, 5]
+    // drop while the condition is true &lt; 5
+    println(list.dropWhile { it &lt; 5 }) // [5, 6, 7, 8, 9, 10]
+    // drop last while the condition is true &gt; 5
+    println(list.dropLastWhile { it &gt; 5 }) // [1, 2, 3, 4, 5]
+}</code></pre><h5 id="chunked">Chunked</h5><p>Quite often, we need to split a collection into parts of a fixed size. This is what the <code class="language-kotlin">chunked()</code> function does. This function takes the size of the chunk as an argument. It returns a list of lists of items – parts of the original collection, and each list has the size defined by the argument. If the last list has a smaller size, it is returned as it is.</p><p>Also, you can apply transformations to the obtained chunks by passing as the second argument a lambda that defines such a transformation.</p><pre><code class="language-kotlin">fun main() {
+    val list = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+    // chunked into 3
+    println(list.chunked(3)) // [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10]]
+    // chunked into 3, the result transformed by applying a lambda with sum
+    println(list.chunked(3) { it.sum() }) // [6, 15, 24, 10]
+    // chunked into 3, the result transformed into a string
+    println(list.chunked(3) { it.joinToString() }) // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+}
+</code></pre><h5 id="windowed">Windowed</h5><p>You can also get all possible ranges of collection elements of a defined size. It is an advanced version of the previous function. Thanks to the <code class="language-kotlin">windowed()</code> function, you can have much more flexibility than with <code class="language-kotlin">chunked()</code> and can operate with the "windows" or ranges according to your needs. We use the following parameters:</p><ul><li><p><code class="language-kotlin">size</code>: it is the number of elements in each window, that is, the size of the window.</p></li><li><p><code class="language-kotlin">step</code>: it is the number of elements we need to scroll between windows, by default it is 1. It represents the distance between the first elements of consecutive windows.</p></li><li><p><code class="language-kotlin">partialWindows</code>: it includes windows of smaller sizes at the end of the collection if you can't build a window of the specified size; by default, it is <code class="language-kotlin">false</code>. It indicates whether you want to keep partial windows at the end.</p></li></ul><p>With <code class="language-kotlin">windowed()</code>, like with <code class="language-kotlin">chunked()</code>, you can also apply transformations to the obtained windows by passing as the second argument a lambda that defines such a transformation.</p><pre><code class="language-kotlin">fun main() {
+    val list = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+    // windows of 3, default step is 1
+    println(list.windowed(3))
+    // [[1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6], [5, 6, 7], [6, 7, 8], [7, 8, 9], [8, 9, 10]]
+    // windows of 3, step 3
+    println(list.windowed(3, 3)) // [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+    // windows of 3, step 4, partial windows is false
+    println(list.windowed(3, 4, false)) // [[1, 2, 3], [5, 6, 7]]
+    // windows of 3, step 4, partial windows is true
+    println(list.windowed(3, 4, true)) // [[1, 2, 3], [5, 6, 7], [9, 10]]
+    // windows of 3, step 4, partial windows is true, the result is transformed with sum
+    println(list.windowed(3, 4, true) { it.sum() }) // [6, 18, 19]  
+}</code></pre><h5 id="conclusion">Conclusion</h5><p>In this topic, you have explored different ways of getting items from a collection: by indicating the position (take), ignoring certain elements (drop), or simply getting a list or lists of items (chunked and windowed).</p><p>Now, you are going to put everything you have learned into practice. Let's go for some tasks!</p>
+</div>

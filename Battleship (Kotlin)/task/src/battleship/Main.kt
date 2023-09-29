@@ -17,14 +17,14 @@ fun main() {
 
     // setup ships
     for (ship in SHIPS) {
-        Field.enterShip(ship)
+        Field.placeShip(ship)
         println()
         Field.display()
     }
 
     // play
     println("\nThe game starts!\n")
-    Field.display()
+    Field.display(true)
     println("\nTake a shot!\n")
 
 
@@ -48,19 +48,25 @@ fun main() {
             continue
         }
 
+        println()
+
         // check if cell is free
         if (Field.field[x][y] == 'O') {
 
             Field.field[x][y] = 'X'
-            Field.display()
-            println("\nYou hit a ship!")
+            Field.fieldInvisible[x][y] = 'X'
+            Field.display(true)
+            println("\nYou hit a ship!\n")
+            Field.display(false)
             break
 
         } else {
 
             Field.field[x][y] = 'M'
-            Field.display()
-            println("\nYou missed!")
+            Field.fieldInvisible[x][y] = 'M'
+            Field.display(true)
+            println("\nYou missed!\n")
+            Field.display(false)
         }
 
     }
@@ -80,9 +86,9 @@ fun main() {
 object Field {
     val N = 10
     val field = Array(N) { Array(N) { '~' } }
+    val fieldInvisible = Array(N) { Array(N) { '~' } }
 
-
-    fun enterShip(ship: Map.Entry<String, Int>): Boolean  {
+    fun placeShip(ship: Map.Entry<String, Int>): Boolean  {
 
         println("\nEnter the coordinates of the ${ship.key} (${ship.value} cells):\n")
 
@@ -172,12 +178,12 @@ object Field {
 
 
 
-    fun display() {
+    fun display(invisible: Boolean = false) {
         println("  1 2 3 4 5 6 7 8 9 10")
         for (i in 0 until N) {
             print("${'A' + i} ")
             for (j in 0 until N) {
-                print("${field[i][j]} ")
+                print("${if (!invisible) field[i][j] else fieldInvisible[i][j]} ")
             }
             println()
         }

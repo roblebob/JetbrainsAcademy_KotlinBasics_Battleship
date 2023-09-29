@@ -1,0 +1,168 @@
+<h2>Mapping transformation</h2>
+<div class="step-text">
+<p>In previous topics, we have learned how to successfully filter and sort collections.</p><p>However, one of the main tasks when working with collections is transforming their elements. In this topic, we will learn how to transform one collection into another with the help of Kotlin's functions.</p><h5 id="mapping">Mapping</h5><p>With the <code class="language-kotlin">map()</code> and <code class="language-kotlin">mapIndexed()</code> functions, we can create a new collection by applying a transformation lambda function to our source collection. It is very useful if we are faced with the task of mapping<strong> one-to-one relationships</strong>.</p><ul><li><p><code class="language-kotlin">map()</code> transforms a given collection into a new one by applying a transformation lambda function to each element.</p></li><li><p><code class="language-kotlin">mapIndexed()</code> transforms a given collection into a new one by applying a transformation lambda function to each element and using the element index as the first argument of the lambda.</p></li></ul><p>When do we need map transformations? You need them whenever you want to get a new collection based on the elements of the original one. Here are some possible use cases: getting a list with the doubled values of all collection elements; getting a collection of integers that represent the length of each string in a collection; getting int values from a string or character collection; capitalizing the first letter in each of the words; changing only the keys or values of a map that meet a condition; filtering words in a list of strings, etc.</p><p>Mapping is one of the key actions when working with collections; it simplifies our work when moving from one collection of elements to another.</p><pre><code class="language-kotlin">fun main() {
+    val numbers = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    val words = listOf("anne", "michael", "caroline", "dimitry", "emilio")
+    
+    // Mapping
+    println(numbers.map { it * 2 }) // [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+    println(words.map { it.uppercase() }) // [ANNE, MICHAEL, CAROLINE, DIMITRY, EMILIO]
+
+    // Mapping with index
+    println(numbers.mapIndexed { index, value -&gt;
+        value * index
+    }
+    ) // [0, 2, 6, 12, 20, 30, 42, 56, 72, 90]
+    println(words.mapIndexed { index, value -&gt;
+        if (index % 2 == 0)
+            value.uppercase()
+        else value
+    }
+    ) // [ANNE, michael, CAROLINE, dimitry, EMILIO]
+
+    // List of word lengths
+    println(words.map { it.length }) // [4, 7, 8, 7, 6]
+    
+    // List of strings of numbers
+    val numbersString = listOf("1", "2", "3", "4", "5a", "6", "7", "8", "9", "10")
+    // List of Ints of numbers
+    // It will return a list of Int? (Int or null)
+    val myNumbersWithNulls = numbersString.map { it.toIntOrNull() } 
+    println(myNumbersWithNulls) // [1, 2, 3, 4, null, 6, 7, 8, 9, 10]
+
+    // List of words
+    val wordsString = listOf("anne", "michael", "caroline", "dimitry", "alicia")
+    // map and filter it
+    // It will return a list of Strings (String or null)
+    val myWordsWithNulls =
+        wordsString.map { 
+            if (it.startsWith("a")) 
+                it.uppercase() 
+            else null 
+        } 
+    println(myWordsWithNulls) // [ANNE, null, null, null, ALICIA]
+}</code></pre><h5 id="mapping-and-nullable-collections">Mapping and nullable collections</h5><p>If you apply a transformation function to the elements and the transformation cannot be performed on some of them, the result for those elements is <code class="language-kotlin">null</code>. You can check the above example. You can avoid these results using <code class="language-kotlin">mapNotNull()</code> or <code class="language-kotlin">mapIndexedNotNull()</code>.</p><p>Why do we need these two functions? If we can't perform a mapping operation, we'll have a <code class="language-kotlin">null</code>, so our collection is <code class="language-kotlin">T?</code>. It is essential to have such operations that allow us to avoid <code class="language-kotlin">null</code> values so that our collection will be of type <code class="language-kotlin">T</code>. These functions are combinations of <code class="language-kotlin">map</code>/<code class="language-kotlin">mapIndexed</code> with <code class="language-kotlin">filterNotNull</code>.</p><pre><code class="language-kotlin">fun main() {
+    val numbers = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    val words = listOf("anne", "michael", "caroline", "dimitry", "emilio")
+
+     //Mapping null
+    println(numbers.map {
+        if (it % 2 == 0) it
+        else null
+    }) // [null, 2, null, 4, null, 6, null, 8, null, 10]
+    println(numbers.mapNotNull {
+        if (it % 2 == 0) it
+        else null
+    }) // [2, 4, 6, 8, 10]
+    
+    // Mapping with index null
+    println(words.mapIndexed { index, value -&gt; 
+        if (index % 2 == 0) value.uppercase() 
+        else null }
+    ) // [ANNE, null, CAROLINE, null, EMILIO]
+    println(words.mapIndexedNotNull { index, value -&gt; 
+        if (index % 2 == 0) value.uppercase() 
+        else null }
+    ) // [ANNE, CAROLINE, EMILIO]
+
+    // List of Strings of numbers
+    val numbersString = listOf("1", "2", "3", "4", "5a", "6", "7", "8", "9", "10")
+    // List of Ints of numbers
+    // It will return a list of Ints? (Int or null)
+    val myNumbersWithNulls = numbersString.map { it.toIntOrNull() }
+    println(myNumbersWithNulls) // [1, 2, 3, 4, null, 6, 7, 8, 9, 10]
+
+    println(myNumbersWithNulls.filterNotNull()) // [1, 2, 3, 4, 6, 7, 8, 9, 10]
+    // It will return a list of Ints
+    val myNumbers = numbersString.mapNotNull { it.toIntOrNull() }
+    println(myNumbers) // [1, 2, 3, 4, 6, 7, 8, 9, 10]
+
+    // List of words
+    val wordsString = listOf("anne", "michael", "caroline", "dimitry", "alicia")
+    // map and filter it
+    // It will return a list of Strings? (String or null)
+    val myWordsWithNulls =
+        wordsString.map {
+            if (it.startsWith("a"))
+                it.uppercase()
+            else 
+                null
+        }
+    println(myWordsWithNulls) // [ANNE, null, null, null, ALICIA]
+    
+    // It will return a list of Strings
+    println(myWordsWithNulls.filterNotNull()) // [ANNE, ALICIA]
+    val myWords =
+        wordsString.mapNotNull {
+            if (it.startsWith("a")) 
+                it.uppercase()
+            else 
+                null
+        } 
+    // It will return a list of Strings
+    println(myWords) // [ANNE, ALICIA]
+
+}</code></pre><h5 id="map-and-mapping">Map and mapping</h5><p>When you are working with the Map type, you have two options to perform a transformation: transform the keys with <code class="language-kotlin">mapKeys()</code> or transform the values associated with the said keys with <code class="language-kotlin">mapValues()</code>. The returned map preserves the entry iteration order of the original map.</p><p>You can use these functions if you need to perform operations according to the key of the map or apply certain transformations only to some values (or to all values): for example, obtain the word length for each key, check if a word is a palindrome, or make a value reversed only if its key is even.</p><pre><code class="language-kotlin">fun main() {
+    val map = mapOf(1 to "one", 2 to "two", 3 to "three")
+
+    println(map.map { it.key }) // [1, 2, 3]
+    println(map.map { it.value }) // [one, two, three]
+
+    println(map.mapKeys { it.key * 2 }) // {2=one, 4=two, 6=three}
+    println(map.mapValues { it.value.uppercase() }) // {1=ONE, 2=TWO, 3=THREE}
+
+    // Map numbers to words
+    val numbersToWords = mapOf(1 to "one", 2 to "two", 3 to "three", 4 to "four", 5 to "five")
+    // key and length of value
+    println(numbersToWords.mapValues { it.value.length }) // {1=3, 2=3, 3=5, 4=4, 5=4}
+    // reversed value where the key is even
+    println(numbersToWords.mapValues {
+        if (it.key % 2 == 0)
+            it.value.reversed()
+        else
+            it.value
+    }) // {1=one, 2=owt, 3=three, 4=ruof, 5=five}
+}
+</code></pre><h5 id="flatten-flattenflatmap">Flatten (flatten/flatMap)</h5><p>There are transformation functions that will help us process several collections. The function <code class="language-kotlin">flatten()</code> returns a single list of all the elements from all collections in the given collection. It is very helpful if we have several collections and we want to get a single collection that concatenates them.</p><p>However, this function is not valid for all kinds of collections. Remember, <code class="language-kotlin">flatten</code> returns a list or a sequence. What about maps? Let's see other alternatives.</p><p>The function <code class="language-kotlin">flatMap()</code> takes a function that maps the elements of one collection to another and returns a list of all the values in those elements. This is equivalent to mapping each element together with flattening to get the final result.  It is very useful if we are faced with the task of mapping<strong> one-to-many relationships</strong>.</p><p>So, thanks to <code class="language-kotlin">flatMap</code>, we can perform a flattening operation on a List of Maps or a List of Lists.</p><pre><code class="language-kotlin">fun main() {   
+    // Flatten example
+    val nestedNumbers = listOf(
+        listOf(1, 2, 3),
+        listOf(4, 5, 6),
+        listOf(7, 8, 9)
+    )
+    val nestedWords = listOf(
+        listOf("anne", "michael"),
+        listOf("caroline", "dimitry"),
+        listOf("emilio", "francois")
+    )
+    println(nestedNumbers.flatten()) // [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    println(nestedWords.flatten()) // [anne, michael, caroline, dimitry, emilio, francois]
+
+    // FlatMap example
+    println(nestedNumbers.flatMap { 
+        it.map { it * 2 } }
+    ) // [2, 4, 6, 8, 10, 12, 14, 16, 18]
+    println(nestedWords.flatMap { 
+        it.map { it.uppercase() } 
+    }) // [ANNE, MICHAEL, CAROLINE, DIMITRY, EMILIO, FRANCOIS]
+
+   // List of maps to flat map
+    val listOfMaps = listOf(
+        mapOf(1 to "one", 2 to "two"),
+        mapOf(3 to "three", 4 to "four")
+    )
+    val resMapFlatten = listOfMaps
+        .flatMap { it.entries }
+        .associate { it.key to it.value } // or it.toPair()
+    println(resMapFlatten) // {1=one, 2=two, 3=three, 4=four}
+
+    // list of list of list to flat list
+    val listOfListOfList = listOf(
+        listOf(listOf(1, 2, 3), listOf(4, 5, 6)),
+        listOf(listOf(7, 8, 9), listOf(10, 11, 12))
+    )
+    val resListFlatten = listOfListOfList
+        .flatMap { it.flatten() } // or .flatten().flatten()
+    println(resListFlatten) // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+}</code></pre><h5 id="conclusion">Conclusion</h5><p>In this topic, we have discussed different mechanisms to transform the elements of a collection and obtain a new collection with these transformed elements. It is important to realise what you want: map one-to-one or one-to-many relationships, use the index, or filter the null values.</p><p>It's time to check what you've learned, do some tasks, and apply all those new functions. Are you ready?</p>
+</div>

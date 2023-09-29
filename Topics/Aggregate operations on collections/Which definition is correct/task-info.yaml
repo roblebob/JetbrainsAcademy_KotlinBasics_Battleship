@@ -1,0 +1,24 @@
+type: choice
+is_multiple_choice: false
+options:
+  - text: Returns the smallest selector return value according to the comparator
+  - text: Returns the smallest element according to the comparator
+  - text: "With a selector function, returns the smallest return value of the selector\
+    \ itself"
+  - text: Returns the smallest selector return value according to the comparator or
+      exception on empty collections
+files:
+  - name: src/Main.kt
+    visible: true
+    text: |
+      // You can experiment here, it won’t be checked
+      
+      fun main(args: Array<String>) {
+        // put your code here
+      }
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/23326#comment
+status: Solved
+record: -1
+custom_name: Which definition is correct?
+local_check: false

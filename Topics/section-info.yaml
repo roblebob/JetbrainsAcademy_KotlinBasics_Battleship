@@ -1,3 +1,13 @@
 content:
   - String formatting
   - Nested and inner classes
+  - Extension functions
+  - Set
+  - Mutable Set
+  - Iterators
+  - Test predicates  checking elements in collection
+  - Mapping transformation
+  - Aggregate operations on collections
+  - Retrieve collection parts
+  - Generic functions
+  - Type Bounds

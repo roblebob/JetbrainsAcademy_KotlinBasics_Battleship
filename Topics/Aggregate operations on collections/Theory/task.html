@@ -1,0 +1,143 @@
+<h2>Aggregate operations on collections</h2>
+<div class="step-text">
+<p>In previous topics, we have learned to order collections or filter their elements based on predicates.</p>
+<p>It is time to learn to obtain values based on the content of a collection, for example, the maximum value, the average value, an object with the maximum value of a property, etc. We will see that Kotlin has handy methods that make this task an easy job.</p>
+<h5 id="basic-aggregate-function">Basic aggregate function</h5>
+<p>When we work with collections, we have a series of methods to obtain values based on the collection content and get additional information about the content. These methods are known as "aggregation methods":</p>
+<ul>
+<li>
+<p><code class="language-kotlin">minOrNull()</code> returns the smallest element of a collection or null on an empty collection. </p>
+</li>
+<li>
+<p><code class="language-kotlin">maxOrNull()</code> returns the largest element of a collection or null on an empty collection.</p>
+</li>
+<li>
+<p><code class="language-kotlin">average()</code> returns the average value of the elements in a collection with number values.</p>
+</li>
+<li>
+<p><code class="language-kotlin">sum()</code> returns the sum of all elements in a collection with number values.</p>
+</li>
+<li>
+<p><code class="language-kotlin">count()</code> returns the number of elements in a collection.</p>
+</li>
+</ul>
+<pre><code class="language-kotlin">fun main() {
+    val numbers = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+    // Min and Max
+    println(numbers.minOrNull()) // 1
+    println(numbers.maxOrNull()) // 10
+    
+    // Average
+    println(numbers.average()) // 5.5
+   
+    // Sum
+    println(numbers.sum()) // 55
+    
+    // Count
+    println(numbers.count()) // 10
+}</code></pre>
+<h5 id="aggregate-with-selector-function">Aggregate with selector function</h5>
+<p>Sometimes, we need to specify which value we want to obtain with an aggregate method. In Kotlin, we have special methods to perform these tasks using a selector function. They are:</p>
+<ul>
+<li>
+<p><code class="language-kotlin">minByOrNull()</code> with a selector function, returns the element with the smallest value. It is used as a substitute for the <code class="language-kotlin">minBy() </code>to avoid an exception.</p>
+</li>
+<li>
+<p><code class="language-kotlin">maxByOrNull()</code> with a selector function, returns the element with the largest value. It is used as a substitute for the <code class="language-kotlin">maxBy() </code>to avoid an exception.</p>
+</li>
+<li>
+<p><code class="language-kotlin">minOfOrNull()</code> with a selector function, returns the smallest return value of the selector itself. It is an evolution of <code class="language-kotlin">minOf()</code>, which throws an exception if the collection is empty.</p>
+</li>
+<li>
+<p><code class="language-kotlin">maxOfOrNull()</code> with a selector function, returns the largest return value of the selector itself.  It is an evolution of <code class="language-kotlin">maxOf()</code>, which throws an exception if the collection is empty.</p>
+</li>
+<li>
+<p><code class="language-kotlin">sumOf()</code> with a selector function, returns the sum of its application to all collection elements.</p>
+</li>
+</ul>
+<p><code class="language-kotlin">minByOrNull()</code>/<code class="language-kotlin">maxByOrNull()</code> and <code class="language-kotlin">minOfOrNull()</code>/<code class="language-kotlin">maxOfOrNull()</code> return <code class="language-kotlin">null</code> on empty collections. Alternatively, we can also use <code class="language-kotlin">minBy()</code>/<code class="language-kotlin">maxBy()</code> and <code class="language-kotlin">maxOf()</code>/<code class="language-kotlin">minOf()</code> to perform the same tasks, but they throw a <code class="language-kotlin">NoSuchElementException</code> on empty collections. Also, you can use <strong>predicates</strong> to find the max or min elements.</p>
+<pre><code class="language-kotlin">fun main() {
+    val words = listOf("anne", "michael", "caroline", "dimitry", "emilio")
+
+    // Count
+    println(words.count()) // 5
+    
+    // maxByOrNull/minByOrNull
+    println(words.maxByOrNull { it.length }) // caroline
+    println(words.minByOrNull { it.length }) // anne
+    
+    //maxOfOrNull/minOfOrNull
+    println(words.maxOfOrNull { it.length }) // 8
+    println(words.minOfOrNull { it.length }) // 4
+    
+    // sumOf
+    println(words.sumOf { it.length }) // 32
+
+    // using predicates, length &gt; 5
+    println(words.count { it.length &gt; 5 }) // 4
+    println(words.maxByOrNull { it.length &gt; 5 }) // michael
+    println(words.minByOrNull { it.length &gt; 5 }) // anne
+
+    // emptyList
+    val emptyWordsList = emptyList&lt;String&gt;()
+    println(emptyWordsList.count()) // 0
+    println(emptyWordsList.maxByOrNull { it.length }) // null
+    println(emptyWordsList.minByOrNull { it.length }) // null
+    println(emptyWordsList.maxOfOrNull { it.length }) // null
+    println(emptyWordsList.minOfOrNull { it.length }) // null
+    println(emptyWordsList.maxOf { it.length })  // NoSuchElementException
+    println(emptyWordsList.minOf { it.length })  // NoSuchElementException
+    println(emptyWordsList.maxBy { it.length })  // NoSuchElementException
+    println(emptyWordsList.minBy { it.length })  // NoSuchElementException
+}</code></pre>
+<p>It is important to note the difference between <code class="language-kotlin">maxOfOrNull</code>/<code class="language-kotlin">minOfOrNull</code> and <code class="language-kotlin">maxByOrNull</code>/<code class="language-kotlin">minByOrNull</code>. <code class="language-kotlin">maxOfOrNull</code>/<code class="language-kotlin">minOfOrNull</code> return the <strong>largest/smallest </strong>value among <strong>all </strong>values produced by the selector function applied to each element in the collection or null if the collection is empty. In the example, the selector is based on the word length. They return 8 (max length) and 4 (min length). Thus, they return the maximum or minimum of the word lengths.</p>
+<p>Meanwhile, <code class="language-kotlin">maxByOrNull</code>/<code class="language-kotlin">minByOrNull</code> return the <strong>first </strong>element yielding the <strong>largest/smallest </strong>value of the given function or null if there are no elements. Thus, they will return the first word that has the maximum or minimum length. They return "caroline" (the first word with the max length 8) and "anne" (the first word with the min length 4). Also, we can use a lambda predicate like <code class="language-kotlin">it.length &gt; 5</code> to obtain the first max or min word based on its length because it is the first element that produces the largest (michael) /smallest (anne) value of the given function (<code class="language-kotlin">it.length &gt; 5</code>).</p>
+<h5 id="aggregate-with-comparator">Aggregate with comparator</h5>
+<p>We can perform the same task as above using a custom comparator with a lambda and the following methods:</p>
+<ul>
+<li>
+<p><code class="language-kotlin">minWithOrNull()</code> returns the smallest element according to the comparator.</p>
+</li>
+<li>
+<p><code class="language-kotlin">maxWithOrNull()</code> returns the largest element according to the comparator.</p>
+</li>
+<li>
+<p><code class="language-kotlin">minOfWithOrNull()</code> returns the smallest selector return value according to the comparator.</p>
+</li>
+<li>
+<p><code class="language-kotlin">maxOfWithOrNull()</code> returns the largest selector return value according to the comparator.</p>
+</li>
+<li>
+<p><code class="language-kotlin">count()</code> returns the number of items according to the comparator.</p>
+</li>
+</ul>
+<p>These methods return <code class="language-kotlin">null</code> on empty collections. However, we also have <code class="language-kotlin">maxOfWith()</code> and <code class="language-kotlin">minOfWith()</code> to perform the same task, and they throw a <code class="language-kotlin">NoSuchElementException</code> on empty collections.</p>
+<pre><code class="language-kotlin">fun main() {
+    val words = listOf("anne", "michael", "caroline", "dimitry", "emilio")
+
+    // MaxWithOrNull/MinWithOrNull
+    println(words.maxWithOrNull(compareBy { it.length })) // caroline
+    println(words.minWithOrNull(compareBy { it.length })) // anne
+
+    // maxOfWithOrNull/minOfWithOrNull
+    println(words.maxOfWithOrNull(naturalOrder()) { it.length }) // 8
+    println(words.minOfWithOrNull(naturalOrder()) { it.length }) // 4
+    
+    // count
+    println(words.count { it.first() == 'a' }) // 1
+}</code></pre>
+<p>Finally, you can combine your custom ordering method with the <code class="language-kotlin">reversed()</code> function to obtain the inverse form of the defined order.</p>
+<pre><code class="language-kotlin">fun main() {
+    val words = listOf("peter", "anne", "michael", "caroline")
+
+    // ordering by length reversed
+    println(words.sortedWith(compareBy { it.length }).reversed()) // [caroline, michael, peter, anne]
+    
+    // ordering by middle letter reversed
+    println(words.sortedWith(compareBy { it[it.length / 2] }).reversed()) // [peter, anne, caroline, michael]
+}</code></pre>
+<h5 id="conclusion">Conclusion</h5>
+<p>In this topic, we have discussed different techniques to obtain the values of a collection using aggregate methods: to find the max, min, or average value, or find the object that has the max value of a certain property.</p>
+<p>It is time to solve some problems to check what you have learned about aggregate methods. Let's go!</p>
+</div>

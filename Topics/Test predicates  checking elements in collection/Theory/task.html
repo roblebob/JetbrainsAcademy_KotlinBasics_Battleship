@@ -1,0 +1,101 @@
+<h2>Test predicates: checking elements in collection</h2>
+<div class="step-text">
+<p>When working with collections, programmers often need to check if collection elements meet some <strong>condition</strong>. Filtering a collection by certain criteria or checking if the collection contains an element with certain properties are among most common tasks, and it is important to do that in the most efficient way.<br/>
+<br/>
+Fortunately we don't have to apply iterative programming mechanisms – conditionals or loops – to find the solution. We can use functional APIs implemented in Kotlin.<br/>
+<br/>
+In this topic, we will present techniques to check if the elements of a collection satisfy certain conditions.</p>
+<h5 id="predicate">Predicate</h5>
+<p>A <strong>predicate</strong> is a function that returns true or false based on the input. We will get true if the condition matches the predicate and false otherwise. A single predicate always checks for the <strong>same </strong>condition; different conditions are checked by different predicates.</p>
+<p>A predicate is defined based on a lambda function:  <code class="language-kotlin">(T) -&gt; Boolean</code>. That is, we define a function for a certain type of element and its condition returns true or false. Let's see a example:</p>
+<pre><code class="language-kotlin">// Lambdas as predicates (T) -&gt; Boolean
+val isEven: (Int) -&gt; Boolean = { x -&gt; x % 2 == 0 }
+val isPalindrome: (String) -&gt; Boolean = { x -&gt; x.reversed() == x }
+
+fun main() {
+    println(isEven(2)) // true
+    println(isEven(3)) // false
+    println(isPalindrome("racecar")) // true
+    println(isPalindrome("potatoes")) // false
+}</code></pre>
+<p>Kotlin offers an API that makes use of extension functions and allows you to check the elements of a collection based on predicates. Also,  a predicate can be passed as a function reference – it's a very common pattern. </p>
+<pre><code class="language-kotlin">val isEven: (Int) -&gt; Boolean = { x -&gt; x % 2 == 0 }
+
+fun main() {
+    val numbers = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+    // any number is even?
+    println(numbers.any { x -&gt; x % 2 == 0 }) // true
+    println(numbers.any { isEven(it) }) // true
+    println(numbers.any(isEven)) // true
+}</code></pre>
+<p>These methods available in all basic Kotlin collections (lists, sets, and maps) allow us to check in an efficient way, without iterative programming, whether a predicate is matched by one or more elements, all elements, or none of the elements in a collection. </p>
+<h5 id="any">Any</h5>
+<p>With a predicate, the <code class="language-kotlin">any()</code> function will return true if at least one collection element matches the predicate we defined in <code class="language-kotlin">any()</code>.  The function can be also called without a predicate to check for emptiness.</p>
+<pre><code class="language-kotlin">fun main() {
+    val numbers = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+    // any number is even?
+    println(numbers.any { x -&gt; x % 2 == 0 }) // true
+    // any number is greater than 100
+    println(numbers.any { x -&gt; x &gt; 100 }) // false
+
+    val palindromes = listOf("racecar", "mom", "dad", "dog")
+    // any palindrome?
+    println(palindromes.any { x -&gt; x.reversed() == x }) // true
+}</code></pre>
+<h5 id="none">None</h5>
+<p>With a predicate, the <code class="language-kotlin">none()</code> function will return true if none of the collection elements matches the predicate indicated in <code class="language-kotlin">none()</code>. Like <code class="language-kotlin">any()</code>, it can also be called without a predicate to check for emptiness.</p>
+<pre><code class="language-kotlin">fun main() {
+    val numbers = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+    // none of the numbers is even?
+    println(numbers.none { x -&gt; x % 2 == 0 }) // false
+    // none of the numbers is greater than 100
+    println(numbers.none { x -&gt; x &gt; 100 }) // true
+
+    val palindromes = listOf("racecar", "mom", "dad", "dog")
+
+    // none is a palindrome?
+    println(palindromes.none { x -&gt; x.reversed() == x }) // false
+
+    val palindromes2 = listOf("cat", "dog")
+
+    // none is a palindrome?
+    println(palindromes2.none { x -&gt; x.reversed() == x }) // true
+}</code></pre>
+<h5 id="all">All</h5>
+<p>The <code class="language-kotlin">all()</code> function will only return true if all elements in the collection satisfy the given predicate. A special feature of this function is that it will always return true on an <strong>empty </strong>collection;<strong> </strong>this trait is also called <a href="https://en.wikipedia.org/wiki/Vacuous_truth" rel="noopener noreferrer nofollow" target="_blank">vacuous truth</a> in math.</p>
+<pre><code class="language-kotlin">fun main() {
+    val numbers = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+    // all numbers are even?
+    println(numbers.all { x -&gt; x % 2 == 0 }) // false
+    // all numbers are less than 100
+    println(numbers.all { x -&gt; x &lt; 100 }) // true
+
+    val palindromes = listOf("racecar", "mom", "dad", "dog")
+
+    // all are palindromes?
+    println(palindromes.all { x -&gt; x.reversed() == x }) // false
+
+    val palindromes2 = listOf("racecar", "mom", "dad")
+
+    // all are palindromes?
+    println(palindromes2.all { x -&gt; x.reversed() == x }) // true
+
+    val emptyIntList = emptyList&lt;Int&gt;()
+
+    // all are even?
+    println(emptyIntList.all { x -&gt; x % 2 == 0 }) // true
+
+    val emptyStringList = emptyList&lt;String&gt;()
+
+    // all are palindromes?
+    println(emptyStringList.all { x -&gt; x.reversed() == x }) // true
+}</code></pre>
+<h5 id="conclusion">Conclusion</h5>
+<p>In this topic, we have seen efficient ways to check if the elements of a collection satisfy a condition. Such conditions are defined based on predicates.</p>
+<p>We have introduced special functions to test predicates, like <code class="language-kotlin">any()</code>, <code class="language-kotlin">none()</code>, and <code class="language-kotlin">all()</code>. They offer us an elegant and efficient way of checking predicates on the elements of a collection.</p>
+<p>Now is the time to check what you have learned. Let's go for it!</p>
+</div>
