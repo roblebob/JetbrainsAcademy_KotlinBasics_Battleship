@@ -1,0 +1,7 @@
+content:
+  - Theory
+  - "Choosing the right delegate, with a bit of arithmetics mixed in"
+  - "Hello, Delegate  Or are you Kotlin"
+  - And... what is the delegate used to do
+  - As if inheritance conflicts weren't enough... delegate tricks and features
+  - A delegate from within

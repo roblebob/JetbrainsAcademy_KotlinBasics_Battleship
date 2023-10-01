@@ -1,0 +1,165 @@
+<h2>Class delegation</h2>
+<div class="step-text">
+<p> </p>
+<p>Class delegation is a mechanism in Kotlin that allows you to delegate the implementation of an interface or functionality of one class to another class. This provides flexibility and prevents problems associated with multiple inheritance.</p>
+<h5 id="delegation-example">Delegation: example</h5>
+<p>Below, you can see an example of class delegation. To implement class delegation, the <code class="language-kotlin">by</code> keyword is used (we will talk about the keyword in a short while).</p>
+<pre><code class="language-kotlin">interface Drawable {
+    fun draw()
+}
+
+class Circle : Drawable {
+    override fun draw() {
+        println("Drawing a circle")
+    }
+}
+
+class DrawingBoard(private val drawable: Drawable) : Drawable by drawable
+
+fun main() {
+    val circle = Circle()
+    val drawingBoard = DrawingBoard(circle)
+    drawingBoard.draw() // "Drawing a circle"
+}
+</code></pre>
+<h5 id="advantages-of-using-class-delegation">Advantages of using class delegation</h5>
+<ul>
+<li>It simplifies code: class delegation avoids code duplication by delegating the implementation of an interface or functionality to another class.</li>
+<li>It improves composition and modularity: instead of using inheritance, you can combine different objects to create new functionality.</li>
+<li>It prevents multiple inheritance problems: unlike inheritance, delegation does not lead to problems related to multiple inheritance, such as the "diamond problem".</li>
+<li>It provides flexibility to change the behavior of objects: you can easily replace a delegate to change the behavior of an object without changing the source code.</li>
+</ul>
+<p>Here's an example of changing the behavior of an object using class delegation:</p>
+<pre><code class="language-kotlin">interface Greeting {
+    fun greet()
+}
+
+class EnglishGreeting : Greeting {
+    override fun greet() {
+        println("Hello!")
+    }
+}
+
+class FrenchGreeting : Greeting {
+    override fun greet() {
+        println("Bonjour!")
+    }
+}
+
+class Greeter(private val greeting: Greeting) : Greeting by greeting
+
+fun main() {
+    val englishGreeting = EnglishGreeting()
+    val frenchGreeting = FrenchGreeting()
+    
+    val greeter1 = Greeter(englishGreeting)
+    val greeter2 = Greeter(frenchGreeting)
+    
+    greeter1.greet() // "Hello!"
+    greeter2.greet() // "Bonjour!"
+}
+</code></pre>
+<p>In the above example, the <code class="language-kotlin">Greeter</code> class delegates the implementation of the <code class="language-kotlin">Greeting</code> interface to different delegates to change the behavior of the object without changing the source code.</p>
+<h5 id="keyword-by">Keyword "by"</h5>
+<p>The keyword <code class="language-kotlin">by</code> is used in Kotlin to delegate the implementation of an interface or functionality of one class to another class.</p>
+<p>Below is an example of using the <code class="language-kotlin">by</code> keyword:</p>
+<pre><code class="language-kotlin">interface Printable {
+    fun print()
+}
+
+class Printer : Printable {
+    override fun print() {
+        println("Printing a document")
+    }
+}
+
+class OfficePrinter(private val printer: Printer) : Printable by printer
+
+fun main() {
+    val printer = Printer()
+    val officePrinter = OfficePrinter(printer)
+    officePrinter.print() // "Printing a document"
+}
+</code></pre>
+<p>In this example, the <code class="language-kotlin">OfficePrinter</code> class delegates the <code class="language-kotlin">Printable</code> interface implementation to the <code class="language-kotlin">Printer</code> class using the <code class="language-kotlin">by</code> keyword.</p>
+<h5 id="differences-between-inheritance-and-delegation">Differences between inheritance and delegation</h5>
+<p>Inheritance:</p>
+<ul>
+<li>A class inherits the functionality and properties of the parent class.</li>
+<li>There is a hard link between the classes.</li>
+<li>There is a possibility of multiple inheritance problems, such as the "diamond problem".</li>
+</ul>
+<p>Here's an example of inheritance:</p>
+<pre><code class="language-kotlin">open class Vehicle {
+    fun move() {
+        println("Vehicle is moving")
+    }
+}
+
+class Car : Vehicle()
+
+fun main() {
+    val car = Car()
+    car.move() // "Vehicle is moving"
+}
+</code></pre>
+<p>Delegation:</p>
+<ul>
+<li>The implementation of an interface or functionality is passed to another class.</li>
+<li>It provides flexibility and modularity and helps avoid multiple inheritance problems.</li>
+</ul>
+<p>Here's an example of delegation:</p>
+<pre><code class="language-kotlin">interface Movable {
+    fun move()
+}
+
+class Vehicle : Movable {
+    override fun move() {
+        println("Vehicle is moving")
+    }
+}
+
+class Car(private val movable: Movable) : Movable by movable
+
+fun main() {
+    val vehicle = Vehicle()
+    val car = Car(vehicle)
+    car.move() // "Vehicle is moving"
+}
+</code></pre>
+<p>In the above example, instead of relying on inheritance, the <code class="language-kotlin">Car</code> class delegates the implementation of the <code class="language-kotlin">Movable</code> interface to the <code class="language-kotlin">Vehicle</code> class, which provides flexibility and modularity of code.</p>
+<h5 id="implementing-interfaces-using-class-delegation">Implementing interfaces using class delegation</h5>
+<p>1. Creating an interface</p>
+<p>You must first define the interface to be used for delegation. In this example, let's create an interface named <code class="language-kotlin">Eatable</code>:</p>
+<pre><code class="language-kotlin">interface Eatable {
+    fun eat()
+}
+</code></pre>
+<p>2. Creating a delegate class</p>
+<p>Next, we create a class that will implement the <code class="language-kotlin">Eatable</code> interface. In this example, let's create an <code class="language-kotlin">Apple</code> class, which implements the <code class="language-kotlin">Eatable</code> interface:</p>
+<pre><code class="language-kotlin">class Apple : Eatable {
+    override fun eat() {
+        println("Eating an apple")
+    }
+}</code></pre>
+<p>3. Creating a class that uses delegation</p>
+<p>Now, let's create a class named <code class="language-kotlin">Person</code>, which will use delegation to implement the <code class="language-kotlin">Eatable</code> interface:</p>
+<pre><code class="language-kotlin">class Person(private val eatable: Eatable) : Eatable by eatable
+</code></pre>
+<p>Here is an example of using the <code class="language-kotlin">Person</code> class and <code class="language-kotlin">Apple</code>'s delegate class:</p>
+<pre><code class="language-kotlin">class Banana : Eatable {
+    override fun eat() {
+        println("Eating a banana")
+    }
+}
+
+fun main() {
+    val banana = Banana()
+    val person = Person(banana)
+    person.eat() // "Eating a banana"
+}
+</code></pre>
+<p>Thus, with the help of Kotlin's class delegation, you can easily and flexibly implement interfaces and change the behavior of objects.</p>
+<h5 id="conclusion">Conclusion</h5>
+<p>Class delegation plays an important role in Kotlin, as it provides a flexible and efficient way to implement interfaces and functionality. It is one of the key mechanisms of the language, which helps to create clean, modular, and easily supported code. It removes inheritance restrictions and provides developers with more options to adapt and extend their code.</p>
+</div>

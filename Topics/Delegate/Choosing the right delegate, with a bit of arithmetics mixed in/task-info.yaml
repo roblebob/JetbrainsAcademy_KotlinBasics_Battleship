@@ -1,0 +1,52 @@
+type: code
+files:
+  - name: src/Main.kt
+    visible: true
+    highlight_level: NONE
+    text: |-
+      /* Do not change the code below. */
+      
+      interface MyInterface {
+          fun print()
+          val amount: Int
+      }
+      
+      class AdditionPrinter : MyInterface {
+          override fun print() { for (i in 1..amount) print("*") }
+          override val amount: Int = 3 + 7 // 10
+      }
+      
+      class SubtractionPrinter : MyInterface {
+          override fun print() { for (i in 1..amount) print("*") }
+          override val amount: Int = 23 - 15 // 8
+      }
+      
+      class MultiplicationPrinter : MyInterface {
+          override fun print() { for (i in 1..amount) print("*") }
+          override val amount: Int = 3 * 4 // 12
+      }
+      
+      class Printer(base: MyInterface) : MyInterface by base {
+          override fun print() {
+              for (i in 1..(amount + 2)) print("*")
+          }
+      }
+      
+      /* Do not change the code above. */
+      
+      fun main() {
+      
+          // Your code here
+          val p = //?
+      
+          // Do not change the code below
+          p.print()
+      }
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/21412#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Sat, 30 Sep 2023 15:28:58 UTC"
+record: -1
+submission_language: kotlin

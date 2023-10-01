@@ -13,3 +13,7 @@ content:
   - Type Bounds
   - Scope functions  apply and also
   - "Scope functions  let, run, and with"
+  - Ranges
+  - Delegate
+  - Class delegation
+  - Object expressions

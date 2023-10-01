@@ -1,0 +1,29 @@
+type: matching
+captions:
+  - <div><p><code>D(B()).printA()</code></p></div>
+  - <div><p><code>D(B()).printB()</code></p></div>
+  - <div><p><code>println(C().msg)</code></p></div>
+  - <div><p><code>C().printA()</code></p></div>
+options:
+  - <div><p><code>It's C</code></p></div>
+  - <div><p><code>It's B</code></p></div>
+  - <div><p><code>It's D</code></p></div>
+  - <div><p><code>It's A</code></p></div>
+files:
+  - name: src/Main.kt
+    visible: true
+    text: |
+      // You can experiment here, it won’t be checked
+      
+      fun main(args: Array<String>) {
+        // put your code here
+      }
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/21409#comment
+status: Solved
+record: -1
+ordering:
+  - 0
+  - 1
+  - 2
+  - 3

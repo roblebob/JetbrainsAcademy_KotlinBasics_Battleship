@@ -1,0 +1,25 @@
+type: code
+files:
+  - name: src/Main.kt
+    visible: true
+    highlight_level: NONE
+    text: |-
+      class Sorted{
+          data class Person(val name: String, val age: Int)
+      
+          val people = listOf(
+              Person("Alice", 25),
+              Person("Bob", 20),
+              Person("Charlie", 30)
+          )
+      
+          val sortedByAge = // make your code here
+      }
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/28749#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Sat, 30 Sep 2023 17:04:28 UTC"
+record: -1
+submission_language: kotlin

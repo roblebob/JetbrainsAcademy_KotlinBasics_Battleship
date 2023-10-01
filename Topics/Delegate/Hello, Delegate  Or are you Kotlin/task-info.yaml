@@ -1,0 +1,51 @@
+type: code
+custom_name: "Hello, Delegate? Or are you Kotlin?"
+files:
+  - name: src/Main.kt
+    visible: true
+    highlight_level: NONE
+    text: |-
+      // Do not change the code below!
+      
+      interface IConsolePrinter {
+          val message: String
+          fun printMessage()
+      }
+      
+      class BasicConsolePrinter(val x: String, val y: String) : IConsolePrinter {
+          override val message: String
+              get() = "$x $y"
+      
+          override fun printMessage() {
+              print("Hello Kotlin")
+          }
+      }
+      
+      class DerivedConsolePrinter(base: IConsolePrinter) : IConsolePrinter by base {
+          override fun printMessage() {
+              print(message)
+          }
+      }
+      
+      fun main() {
+          val h = "Hello"
+          val d = "Delegate"
+          val k = "Kotlin"
+      
+          // Do not change the code above!
+      
+          val delegate = //?
+      
+          // Do not change the code below!
+      
+          val printer = DerivedConsolePrinter(delegate)
+          printer.printMessage()
+      }
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/21411#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Sat, 30 Sep 2023 15:31:54 UTC"
+record: -1
+submission_language: kotlin

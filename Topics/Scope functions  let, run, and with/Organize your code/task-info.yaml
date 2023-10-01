@@ -1,0 +1,15 @@
+type: code
+files:
+  - name: src/Main.kt
+    visible: true
+    text: "fun main() {\n    val day = readln()\n    val month = readln()\n    val year\
+    \ = readln()\n\n    val data = \"$month.$day.$year\"\n\n    // Do not change the\
+    \ code below \n    println(data)\n}"
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/22882#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Sat, 30 Sep 2023 13:48:03 UTC"
+record: -1
+submission_language: kotlin

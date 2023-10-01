@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id=":Topics-Delegate-As_if_inheritance_conflicts_weren't_enough..._delegate_tricks_and_features" external.linked.project.path="$MODULE_DIR$/../../../../../Topics/Delegate/As if inheritance conflicts weren't enough... delegate tricks and features" external.root.project.path="$MODULE_DIR$/../../../../.." external.system.id="GRADLE" external.system.module.group="JetbrainsAcademy_KotlinBasics_Battleship" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../../../Topics/Delegate/As if inheritance conflicts weren't enough... delegate tricks and features">
+      <excludeFolder url="file://$MODULE_DIR$/../../../../../Topics/Delegate/As if inheritance conflicts weren't enough... delegate tricks and features/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../../../Topics/Delegate/As if inheritance conflicts weren't enough... delegate tricks and features/build" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../../../Topics/Delegate/As if inheritance conflicts weren't enough... delegate tricks and features/out" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

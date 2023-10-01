@@ -1,0 +1,97 @@
+<h2>Object expressions</h2>
+<div class="step-text">
+<h5 id="object-expressions-in-kotlin">Object expressions in Kotlin</h5>
+<p>In this topic, we will discuss object expressions in Kotlin. Object expressions allow creating anonymous objects that can be used to perform specific tasks. In this topic, we will cover the basics of object expressions and provide some examples of their use.</p>
+<h5 id="what-are-object-expressions">What are object expressions?</h5>
+<p>Object expressions in Kotlin allow creating anonymous objects for specific tasks. These objects are instances of a class created on-the-fly and have no name.</p>
+<p>Object expressions are useful in situations where you need to create an object that implements a certain interface or inherits a class but you don't need to create a whole new class for that.</p>
+<p>To create an anonymous object, use the <code class="language-kotlin">object</code> keyword. Here's a simple example of an anonymous object:</p>
+<pre><code class="language-kotlin">val anonymousObject = object {
+    val x = 10
+    val y = 20
+
+    fun printSum() {
+        println("Sum: ${x + y}")
+    }
+}
+
+anonymousObject.printSum() // Output: Sum: 30</code></pre>
+<p>Anonymous objects can implement interfaces. For example:</p>
+<pre><code class="language-kotlin">interface ClickListener {
+    fun onClick()
+}
+
+val clickListener = object : ClickListener {
+    override fun onClick() {
+        println("Button clicked!")
+    }
+}
+
+clickListener.onClick() // Output: Button clicked!</code></pre>
+<p>Anonymous objects have a limited scope. If you want to use an anonymous object as a variable value, you need to specify the variable type explicitly:</p>
+<pre><code class="language-kotlin">val listener: ClickListener = object : ClickListener {
+    override fun onClick() {
+        println("Button clicked!")
+    }
+}
+
+listener.onClick() // Output: Button clicked!</code></pre>
+<p>Anonymous objects are often used for event handling, especially in user interfaces. Here's an example:</p>
+<pre><code class="language-kotlin">class Button {
+    private var clickListener: ClickListener? = null
+
+    fun setOnClickListener(listener: ClickListener) {
+        clickListener = listener
+    }
+
+    fun click() {
+        clickListener?.onClick()
+    }
+}
+
+val button = Button()
+
+button.setOnClickListener(object : ClickListener {
+    override fun onClick() {
+        println("Button clicked!")
+    }
+})
+
+button.click() // Output: Button clicked!</code></pre>
+<p>Anonymous objects can also be used as comparators:</p>
+<pre><code class="language-kotlin">data class Person(val name: String, val age: Int)
+
+val people = listOf(
+    Person("Alexander", 25),
+    Person("Elena", 30),
+    Person("Dmitry", 21)
+)
+
+val sortedByAge = people.sortedWith(object : Comparator&lt;Person&gt; {
+    override fun compare(p1: Person, p2: Person): Int {
+        return p1.age.compareTo(p2.age)
+    }
+})
+
+println(sortedByAge) // Output: [Person(name=Dmitry, age=21), Person(name=Alexander, age=25), Person(name=Elena, age=30)]</code></pre>
+<p>In Kotlin, you can use an object instead of the classic singleton. However, sometimes you may need to replace a singleton with a regular class. In such cases, you can use object expressions:</p>
+<pre><code class="language-kotlin">interface Database {
+    fun connect()
+}
+
+class MySQLDatabase : Database {
+    override fun connect() {
+        println("Connecting to MySQL...")
+    }
+}
+
+val database: Database = object : MySQLDatabase() {
+    override fun connect() {
+        println("Connecting to a new database...")
+    }
+}
+
+database.connect() // Output: Connecting to a new database...</code></pre>
+<h5 id="conclusion">Conclusion</h5>
+<p>In this topic, we've covered object expressions in Kotlin – their basics and some examples of their usage. Object expressions allow creating anonymous objects for solving various tasks, such as implementing interfaces, handling events, or sorting collections. They simplify code writing and reduce the number of created classes, which makes your code cleaner and more understandable.</p>
+</div>

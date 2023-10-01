@@ -1,0 +1,31 @@
+type: code
+files:
+  - name: src/Main.kt
+    visible: true
+    highlight_level: NONE
+    text: |-
+      interface BonusCalculator {
+          fun calculateBonus(spend: Double): Double
+      }
+      
+      class FlatRateBonusCalculator(private val rate: Double) : BonusCalculator {
+          override fun calculateBonus(spend: Double): Double {
+              return (spend / 100.0).toInt() * rate
+          }
+      }
+      
+      class PercentageBonusCalculator(private val percentage: Double) : BonusCalculator {
+          override fun calculateBonus(spend: Double): Double {
+              return spend * percentage / 100.0
+          }
+      }
+      
+      class Customer(val name: String, bonusCalculator: BonusCalculator) // make your code here
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/28052#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Sat, 30 Sep 2023 16:46:32 UTC"
+record: -1
+submission_language: kotlin

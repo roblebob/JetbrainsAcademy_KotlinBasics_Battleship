@@ -1,0 +1,34 @@
+type: code
+files:
+  - name: src/Main.kt
+    visible: true
+    text: "/* Do not change the code below */\n\n// ILogHolder is an interface that\
+    \ defines methods for printing and collecting logs,\n// and a property for holding\
+    \ the current log\ninterface ILogHolder {\n    fun printLog()\n    fun collectLog(log:\
+    \ String)\n    var curLog: String\n}\n\n// Logger is a class that implements the\
+    \ ILogHolder interface\nclass Logger : ILogHolder {\n    // Print the current\
+    \ log\n    override fun printLog() {\n        println(curLog)\n    }\n\n    //\
+    \ Collect a log message and add it to the current log\n    override fun collectLog(log:\
+    \ String) {\n        curLog += \"\\n> $log\"\n    }\n\n    // Initialize the current\
+    \ log\n    override var curLog: String = \"> Logger initialized.\"\n}\n/* Do not\
+    \ change the code above */\n\n// Introduce the delegate here, following the argument\
+    \ declaration\nclass ErrorHandler(base: ILogHolder) // Your code here\n{    \n\
+    \    var errorMessage: String = \"\" // Current error message\n\n    // Get an\
+    \ error message and log it\n    fun getErrorMessage(msg: String) {\n        errorMessage\
+    \ = msg\n        logErrorMessage()\n    }\n\n    // Implement here logErrorMessage()\
+    \ that adds the error message to the log\n}\n\n// Function to simulate some operations\
+    \ and generate error messages\nfun doSomething(handler: ErrorHandler) {\n    handler.getErrorMessage(\"\
+    Access denied\")\n    handler.getErrorMessage(\"Out of memory\")\n    handler.getErrorMessage(\"\
+    I'm not an error\")\n}\n\nfun main() {\n    val log = Logger() // Create a Logger\
+    \ object\n    val handler = ErrorHandler(log) // Create an ErrorHandler object\
+    \ with the Logger object as a delegate\n\n    doSomething(handler) // Do some\
+    \ operations and generate error messages\n\n    handler.printLog() // Print the\
+    \ error log\n}"
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/21414#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Sat, 30 Sep 2023 15:43:47 UTC"
+record: -1
+submission_language: kotlin

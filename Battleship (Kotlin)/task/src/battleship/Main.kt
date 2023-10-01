@@ -13,36 +13,27 @@ val SHIPS = mapOf(
 
 
 fun main() {
-    Field.display()
+    Field.displayBackend()
 
     // setup ships
     for (ship in SHIPS) {
         Field.placeShip(ship)
         println()
-        Field.display()
+        Field.displayBackend()
     }
 
     // play
     println("\nThe game starts!\n")
-    Field.display(true)
+    Field.displayFrontend()
     println("\nTake a shot!\n")
 
-
-    ////////////////////////////
-
-
-
-
-
-    while (true) {
-        val p = readln()
-        // extract coordinates
-        val x = p[0] - 'A'
-        val y = p.substring(1).toInt() - 1
+    main@while (true) {
+        // read point coordinates
+        val p: Pair<Int, Int> = readln().let { Pair(it[0] - 'A', it.substring(1).toInt() - 1 ) }
 
         // check if coordinates are valid
-        if (x !in 0 until Field.N ||
-            y !in 0 until Field.N
+        if (p.first !in 0 until Field.N ||
+            p.second !in 0 until Field.N
         ) {
             println("\nError! You entered the wrong coordinates! Try again:\n")
             continue
@@ -50,28 +41,31 @@ fun main() {
 
         println()
 
-        // check if cell is free
-        if (Field.field[x][y] == 'O') {
 
-            Field.field[x][y] = 'X'
-            Field.fieldInvisible[x][y] = 'X'
-            Field.display(true)
-            println("\nYou hit a ship!\n")
-            Field.display(false)
-            break
+        val thereIsAShip = Field.backend[p.first][p.second] == 'O' || Field.backend[p.first][p.second] == 'X'
 
-        } else {
 
-            Field.field[x][y] = 'M'
-            Field.fieldInvisible[x][y] = 'M'
-            Field.display(true)
-            println("\nYou missed!\n")
-            Field.display(false)
+        Field.backend[p.first][p.second] = if (thereIsAShip) 'X' else 'M'
+        Field.frontend[p.first][p.second] = if (thereIsAShip) 'X' else 'M'
+        Field.displayFrontend()
+        if (thereIsAShip) {
+            for (entry in Field.ledger) {
+                if (p in entry.value) {
+                    entry.value.remove(p)
+                    if (Field.ledgerIsEmpty()) {
+                        println("\nYou sank the last ship. You won. Congratulations!\n")
+                        break@main
+                    }
+                    if (entry.value.isEmpty()) {
+                        println("\nYou sank a ship! Specify a new target:\n")
+                        continue@main
+                    }
+                }
+            }
         }
-
+        println("\nYou ${if (thereIsAShip) "hit a ship" else "missed"}! Try again:\n")
+        //Field.displayBackend()
     }
-
-
 }
 
 
@@ -84,72 +78,80 @@ fun main() {
 
 
 object Field {
-    val N = 10
-    val field = Array(N) { Array(N) { '~' } }
-    val fieldInvisible = Array(N) { Array(N) { '~' } }
+    const val N = 10
+    val backend = Array(N) { Array(N) { '~' } }
+    val frontend = Array(N) { Array(N) { '~' } }
+    val ledger = mutableMapOf<String, MutableSet<Pair<Int, Int>>>()
+
+
 
     fun placeShip(ship: Map.Entry<String, Int>): Boolean  {
 
+        ledger[ship.key] = mutableSetOf()
         println("\nEnter the coordinates of the ${ship.key} (${ship.value} cells):\n")
 
         out@while (true) {
 
-            val (p0, p1) = readln().split(" ")
-
-            // extract coordinates
-            var x0 = p0[0] - 'A'
-            var y0 = p0.substring(1).toInt() - 1
-            var x1 = p1[0] - 'A'
-            var y1 = p1.substring(1).toInt() - 1
-
-            // swap, if needed
-            if (x0 > x1) x0 = x1.also { x1 = x0 }
-            if (y0 > y1) y0 = y1.also { y1 = y0 }
+            // read endpoints of the ship
+            var (p0, p1) = readln().split(" ")
+                .let { listOf( Pair(it[0][0] - 'A', it[0].substring(1).toInt() - 1 ),
+                               Pair(it[1][0] - 'A', it[1].substring(1).toInt() - 1 ) ) }
 
             // check if coordinates are valid
-            if (x0 !in 0 until N ||
-                y0 !in 0 until N ||
-                x1 !in 0 until N ||
-                y1 !in 0 until N ||
-                (x0 != x1 && y1 != y0)
+            if (p0.first !in 0 until N ||
+                p0.second !in 0 until N ||
+                p1.first !in 0 until N ||
+                p1.second !in 0 until N ||
+                (p0.first != p1.first && p0.second != p1.second) ||
+                (p0.first == p1.first && p0.second == p1.second)
             ) {
                 println("\nError! Wrong ship location! Try again:\n")
                 continue@out
             }
 
+            // swap, if needed
+            if (p0.first > p1.first || p0.second > p1.second) {
+                p0 = p1 .also { p1 = p0 }
+            }
+
+
             // check length
-            if ((x0 == x1 && y1 - y0 + 1 != ship.value) ||
-                (y0 == y1 && x1 - x0 + 1 != ship.value)
+            if ((p0.first == p1.first  &&  p1.second - p0.second + 1 != ship.value) ||
+                (p0.second == p1.second  &&  p1.first - p0.first + 1 != ship.value)
             ) {
                 println("\nError! Wrong length of the ${ship.key}! Try again:\n")
                 continue@out
             }
 
+
             // check if cells and their neighborhoods are free
-            if (x0 == x1)  {
-                for (y in y0..y1) {
-                    if (!neighborhoodFree(x0, y)) {
+            if (p0.first == p1.first)  {
+                for (y in p0.second..p1.second) {
+                    if (!neighborhoodFree(p0.first, y)) {
                         println("\nError! You placed it too close to another one. Try again:\n")
                         continue@out
                     }
                 }
-            } else if (y0 == y1) {
-                for (x in x0..x1) {
-                    if (!neighborhoodFree(x, y0)) {
+            } else if (p0.second == p1.second) {
+                for (x in p0.first..p1.first) {
+                    if (!neighborhoodFree(x, p0.second)) {
                         println("\nError! You placed it too close to another one. Try again:\n")
                         continue@out
                     }
                 }
             }
 
-            // write "~" into cells and their neighborhoods are free
-            if (x0 == x1)  {
-                for (y in y0..y1) {
-                    field[x0][y] = SYMBOL_SHIP
+
+            // write SYMBOL_SHIP into cells
+            if (p0.first == p1.first)  {
+                for (y in p0.second..p1.second) {
+                    backend[p0.first][y] = SYMBOL_SHIP
+                    ledger[ship.key]!!.add( Pair(p0.first, y) )
                 }
-            } else if (y0 == y1) {
-                for (x in x0..x1) {
-                    field[x][y0] = SYMBOL_SHIP
+            } else if (p0.second == p1.second) {
+                for (x in p0.first..p1.first) {
+                    backend[x][p0.second] = SYMBOL_SHIP
+                    ledger[ship.key]!!.add( Pair(x, p0.second) )
                 }
             }
 
@@ -166,7 +168,7 @@ object Field {
             for (j in -1..1) {
                 if (x + i in 0 until N &&
                     y + j in 0 until N &&
-                    field[x + i][y + j] != SYMBOL_EMPTY
+                    backend[x + i][y + j] != SYMBOL_EMPTY
                 ) {
                     //println("...... neighborhood is NOT free")
                     return false
@@ -178,17 +180,35 @@ object Field {
 
 
 
-    fun display(invisible: Boolean = false) {
+    fun displayFrontend() {
+        display(true)
+    }
+
+    fun displayBackend() {
+        display(false)
+    }
+
+
+    private fun display(invisible: Boolean = false) {
         println("  1 2 3 4 5 6 7 8 9 10")
         for (i in 0 until N) {
             print("${'A' + i} ")
             for (j in 0 until N) {
-                print("${if (!invisible) field[i][j] else fieldInvisible[i][j]} ")
+                print("${if (!invisible) backend[i][j] else frontend[i][j]} ")
             }
             println()
         }
     }
 
+
+    fun ledgerIsEmpty(): Boolean {
+        for (entry in ledger) {
+            if (entry.value.isNotEmpty()) {
+                return false
+            }
+        }
+        return true
+    }
 }
 
 
