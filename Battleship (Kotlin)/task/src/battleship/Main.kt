@@ -11,60 +11,77 @@ val SHIPS = mapOf(
     "Destroyer" to 2
 )
 
+val PLAYERS  = listOf("Player 1", "Player 2")
 
 fun main() {
-    Field.displayBackend()
 
-    // setup ships
-    for (ship in SHIPS) {
-        Field.placeShip(ship)
-        println()
-        Field.displayBackend()
-    }
+    Field.placeShips()
 
-    // play
     println("\nThe game starts!\n")
-    Field.displayFrontend()
-    println("\nTake a shot!\n")
+
+
 
     main@while (true) {
-        // read point coordinates
-        val p: Pair<Int, Int> = readln().let { Pair(it[0] - 'A', it.substring(1).toInt() - 1 ) }
 
-        // check if coordinates are valid
-        if (p.first !in 0 until Field.N ||
-            p.second !in 0 until Field.N
-        ) {
-            println("\nError! You entered the wrong coordinates! Try again:\n")
-            continue
-        }
+        for (player in PLAYERS) {
 
-        println()
+            inner@while(true) {
 
+                println("Press Enter and pass the move to another player")
+                readln()
 
-        val thereIsAShip = Field.backend[p.first][p.second] == 'O' || Field.backend[p.first][p.second] == 'X'
+                val theOtherPlayer = PLAYERS.toMutableList().apply {remove(player)}.random()
 
+                Field.displayFrontend(theOtherPlayer)
+                println("-".repeat(21))
+                Field.displayBackend(player)
+                println("\n$player, it's your turn:\n")
 
-        Field.backend[p.first][p.second] = if (thereIsAShip) 'X' else 'M'
-        Field.frontend[p.first][p.second] = if (thereIsAShip) 'X' else 'M'
-        Field.displayFrontend()
-        if (thereIsAShip) {
-            for (entry in Field.ledger) {
-                if (p in entry.value) {
-                    entry.value.remove(p)
-                    if (Field.ledgerIsEmpty()) {
-                        println("\nYou sank the last ship. You won. Congratulations!\n")
-                        break@main
-                    }
-                    if (entry.value.isEmpty()) {
-                        println("\nYou sank a ship! Specify a new target:\n")
-                        continue@main
+                // read point coordinates
+                val p: Pair<Int, Int> = readln().let { Pair(it[0] - 'A', it.substring(1).toInt() - 1 ) }
+
+                // check if coordinates are valid
+                if (p.first !in 0 until Field.N ||
+                    p.second !in 0 until Field.N
+                ) {
+                    println("\nError! You entered the wrong coordinates! Try again:\n")
+                    continue@inner
+                }
+
+                val thereIsAShip = Field.backend[theOtherPlayer]!![p.first][p.second] in setOf('O', 'X')
+
+                Field.backend[theOtherPlayer]!![p.first][p.second] = if (thereIsAShip) 'X' else 'M'
+                Field.frontend[theOtherPlayer]!![p.first][p.second] = if (thereIsAShip) 'X' else 'M'
+
+                if (thereIsAShip) {
+                    for (entry in Field.ledger[theOtherPlayer]!!) {
+                        if (p in entry.value) {
+
+                            val pSet = entry.value.toMutableSet()
+                            pSet.remove(p)
+
+                            Field.ledger[theOtherPlayer]!![entry.key] = pSet
+
+                            if (Field.ledgerIsEmpty(theOtherPlayer)) {
+                                println("\nYou sank the last ship. You won. Congratulations!\n")
+                                break@inner
+                            }
+                            if (pSet.isEmpty()) {
+                                println("\nYou sank a ship!\n")
+                                continue@inner
+                            }
+
+                            println("\nYou hit a ship!\n")
+                            break@inner
+                        }
+
                     }
                 }
+
+                println("\nYou missed!\n")
+                break@inner
             }
         }
-        println("\nYou ${if (thereIsAShip) "hit a ship" else "missed"}! Try again:\n")
-        //Field.displayBackend()
     }
 }
 
@@ -79,96 +96,121 @@ fun main() {
 
 object Field {
     const val N = 10
-    val backend = Array(N) { Array(N) { '~' } }
-    val frontend = Array(N) { Array(N) { '~' } }
-    val ledger = mutableMapOf<String, MutableSet<Pair<Int, Int>>>()
+    val backend  = mutableMapOf<String, Array<Array<Char>>>()
+    val frontend = mutableMapOf<String, Array<Array<Char>>>()
+    val ledger   = mutableMapOf<String, MutableMap<String, MutableSet<Pair<Int, Int>>>>()
 
 
+    fun placeShips(): Boolean  {
 
-    fun placeShip(ship: Map.Entry<String, Int>): Boolean  {
+        for (player in PLAYERS) {
 
-        ledger[ship.key] = mutableSetOf()
-        println("\nEnter the coordinates of the ${ship.key} (${ship.value} cells):\n")
+            backend[player] = Array(N) { Array(N) { '~' } }
+            frontend[player] = Array(N) { Array(N) { '~' } }
+            println("$player, place your ships on the game field\n")
+            displayBackend(player)
 
-        out@while (true) {
+            ledger[player] = mutableMapOf()
 
-            // read endpoints of the ship
-            var (p0, p1) = readln().split(" ")
-                .let { listOf( Pair(it[0][0] - 'A', it[0].substring(1).toInt() - 1 ),
-                               Pair(it[1][0] - 'A', it[1].substring(1).toInt() - 1 ) ) }
+            for (ship in SHIPS) {
 
-            // check if coordinates are valid
-            if (p0.first !in 0 until N ||
-                p0.second !in 0 until N ||
-                p1.first !in 0 until N ||
-                p1.second !in 0 until N ||
-                (p0.first != p1.first && p0.second != p1.second) ||
-                (p0.first == p1.first && p0.second == p1.second)
-            ) {
-                println("\nError! Wrong ship location! Try again:\n")
-                continue@out
-            }
+                ledger[player]!![ship.key] = mutableSetOf()
 
-            // swap, if needed
-            if (p0.first > p1.first || p0.second > p1.second) {
-                p0 = p1 .also { p1 = p0 }
-            }
+                println("\nEnter the coordinates of the ${ship.key} (${ship.value} cells):\n")
 
+                out@ while (true) {
 
-            // check length
-            if ((p0.first == p1.first  &&  p1.second - p0.second + 1 != ship.value) ||
-                (p0.second == p1.second  &&  p1.first - p0.first + 1 != ship.value)
-            ) {
-                println("\nError! Wrong length of the ${ship.key}! Try again:\n")
-                continue@out
-            }
+                    // read endpoints of the ship
+                    var (p0, p1) = readln().split(" ")
+                        .let {
+                            listOf(
+                                Pair(it[0][0] - 'A', it[0].substring(1).toInt() - 1),
+                                Pair(it[1][0] - 'A', it[1].substring(1).toInt() - 1)
+                            )
+                        }
 
-
-            // check if cells and their neighborhoods are free
-            if (p0.first == p1.first)  {
-                for (y in p0.second..p1.second) {
-                    if (!neighborhoodFree(p0.first, y)) {
-                        println("\nError! You placed it too close to another one. Try again:\n")
+                    // check if coordinates are valid
+                    if (p0.first !in 0 until N ||
+                        p0.second !in 0 until N ||
+                        p1.first !in 0 until N ||
+                        p1.second !in 0 until N ||
+                        (p0.first != p1.first && p0.second != p1.second) ||
+                        (p0.first == p1.first && p0.second == p1.second)
+                    ) {
+                        println("\nError! Wrong ship location! Try again:\n")
                         continue@out
                     }
-                }
-            } else if (p0.second == p1.second) {
-                for (x in p0.first..p1.first) {
-                    if (!neighborhoodFree(x, p0.second)) {
-                        println("\nError! You placed it too close to another one. Try again:\n")
+
+                    // swap, if needed
+                    if (p0.first > p1.first || p0.second > p1.second) {
+                        p0 = p1.also { p1 = p0 }
+                    }
+
+
+                    // check length
+                    if ((p0.first == p1.first && p1.second - p0.second + 1 != ship.value) ||
+                        (p0.second == p1.second && p1.first - p0.first + 1 != ship.value)
+                    ) {
+                        println("\nError! Wrong length of the ${ship.key}! Try again:\n")
                         continue@out
                     }
+
+
+                    // check if cells and their neighborhoods are free
+                    if (p0.first == p1.first) {
+                        for (y in p0.second..p1.second) {
+                            if (!neighborhoodFree(player, p0.first, y)) {
+                                println("\nError! You placed it too close to another one. Try again:\n")
+                                continue@out
+                            }
+                        }
+                    } else if (p0.second == p1.second) {
+                        for (x in p0.first..p1.first) {
+                            if (!neighborhoodFree(player, x, p0.second)) {
+                                println("\nError! You placed it too close to another one. Try again:\n")
+                                continue@out
+                            }
+                        }
+                    }
+
+
+                    // write SYMBOL_SHIP into cells
+                    if (p0.first == p1.first) {
+                        for (y in p0.second..p1.second) {
+                            backend[player]?.get(p0.first)?.set(y, SYMBOL_SHIP)
+                            ledger[player]!![ship.key]!!.add(Pair(p0.first, y))
+                        }
+                    } else if (p0.second == p1.second) {
+                        for (x in p0.first..p1.first) {
+                            backend[player]?.get(x)?.set(p0.second, SYMBOL_SHIP)
+                            //ledger[player]?.get(ship.key)!!.add(Pair(x, p0.second))
+                            ledger[player]!![ship.key]!!.add(Pair(x, p0.second))
+                        }
+                    }
+
+                    break
                 }
+                println()
+                displayBackend(player)
+
             }
 
-
-            // write SYMBOL_SHIP into cells
-            if (p0.first == p1.first)  {
-                for (y in p0.second..p1.second) {
-                    backend[p0.first][y] = SYMBOL_SHIP
-                    ledger[ship.key]!!.add( Pair(p0.first, y) )
-                }
-            } else if (p0.second == p1.second) {
-                for (x in p0.first..p1.first) {
-                    backend[x][p0.second] = SYMBOL_SHIP
-                    ledger[ship.key]!!.add( Pair(x, p0.second) )
-                }
+            if (player != PLAYERS.last()) {
+                println("\nPress Enter and pass the move to another player\n")
+                readln()
             }
-
-
-
-            break
         }
+
         return true
     }
 
 
-    private fun neighborhoodFree(x: Int, y: Int): Boolean {
+    private fun neighborhoodFree(player: String, x: Int, y: Int): Boolean {
         for (i in -1..1) {
             for (j in -1..1) {
                 if (x + i in 0 until N &&
                     y + j in 0 until N &&
-                    backend[x + i][y + j] != SYMBOL_EMPTY
+                    backend[player]?.get(x + i)?.get(y + j) != SYMBOL_EMPTY
                 ) {
                     //println("...... neighborhood is NOT free")
                     return false
@@ -180,29 +222,29 @@ object Field {
 
 
 
-    fun displayFrontend() {
-        display(true)
+    fun displayFrontend(player: String) {
+        display(player, true)
     }
 
-    fun displayBackend() {
-        display(false)
+    fun displayBackend(player: String) {
+        display(player,false)
     }
 
 
-    private fun display(invisible: Boolean = false) {
+    private fun display(player: String, invisible: Boolean = false) {
         println("  1 2 3 4 5 6 7 8 9 10")
         for (i in 0 until N) {
             print("${'A' + i} ")
             for (j in 0 until N) {
-                print("${if (!invisible) backend[i][j] else frontend[i][j]} ")
+                print("${if (!invisible) backend[player]?.get(i)?.get(j) else frontend[player]?.get(i)?.get(j)} ")
             }
             println()
         }
     }
 
 
-    fun ledgerIsEmpty(): Boolean {
-        for (entry in ledger) {
+    fun ledgerIsEmpty(player: String): Boolean {
+        for (entry in ledger[player]!!) {
             if (entry.value.isNotEmpty()) {
                 return false
             }
