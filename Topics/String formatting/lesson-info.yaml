@@ -1,3 +1,9 @@
 content:
   - Theory
   - Format Double with a comma and 2 decimal digits
+  - Valid format specifiers
+  - Matching specifier with type
+  - Integer format string
+  - Correct printout
+  - Format String
+  - Dynamic Double formatting
