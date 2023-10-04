@@ -1,0 +1,98 @@
+<h2>Commonly Used Regex</h2>
+<div class="step-text">
+<p></p>
+<p>You have already learned a lot about the concept of regular expressions. In this topic, we will analyze the classic examples of the practical use of regexps.</p>
+<h5 id="groups-in-regexps" style="text-align: center;">Groups in regexps</h5>
+<p>First of all, let's introduce an important concept that we will need to compose complex regexps: <strong>groups</strong>. Groups have the same meaning as in mathematical expressions: with their help, we can set new priorities for operations. </p>
+<p>A part of a regular expression can be enclosed in parentheses to make a group. We can also apply quantifiers to each group: if you set a quantifier after the brackets, then it will apply to the entire contents of the bracket, and not to a single character.</p>
+<p>In the code below, we find a pair of characters "<code class="language-kotlin">ho</code>", which occurs one or more times in a text:</p>
+<pre><code class="language-kotlin">val regexWithGroups = """(ho)+""".toRegex()
+val text = "ho hoho hohoho"
+
+val resultWithGroups = regexWithGroups.findAll(text)
+for (res in resultWithGroups) println(res.value)</code></pre>
+<p>The result will be the following:</p>
+<pre><code class="language-no-highlight">ho
+hoho
+hohoho</code></pre>
+<h5 id="dates" style="text-align: center;">Dates</h5>
+<p>Let's start with a fairly simple and common task. Suppose you need to find all dates in two different formats: <strong>yyyy-mm-dd</strong> and <strong>yyyy/mm/dd</strong>. How can we do it? We need to match the text sections that look like this: 4 digits, then one of the possible separators (<code class="language-kotlin">/</code> or <code class="language-kotlin">-</code>), then 2 digits, and then the same separator and 2 digits. Consider the following regular expression as a solution:</p>
+<pre><code class="language-no-highlight">\d{4}(-|\/)\d{2}\1\d{2}</code></pre>
+<ul>
+<li>We search for 4 digits and then for one of the possible separators: <code class="language-kotlin">\d{4}(-|\/)</code>.</li>
+<li>Next, we look for two digits and the same delimiter that has been already found: <code class="language-kotlin">\d{2}\1</code>. With <code class="language-kotlin">\1</code> we refer to the first group we encountered in the regex: <code class="language-kotlin">(-|\/)</code>. This is how we look for the already identified separator.</li>
+<li>Finally, we search for two digits: <code class="language-kotlin">\d{2}</code>.</li>
+</ul>
+<p>Shall we check it? Take a look at the code below:</p>
+<pre><code class="language-kotlin">val regex = Regex("""\d{4}(-|\/)\d{2}\1\d{2}""")
+val dates = regex.findAll("Date 1: 2022-06-06" +
+        "Date 2: 2021/01/01; date 3: 2020-02-02")
+
+for (date in dates) println(date.value)</code></pre>
+<p>The result is:</p>
+<pre><code class="language-no-highlight">2022-06-06
+2021/01/01
+2020-02-02</code></pre>
+<p>Everything works! However, keep in mind that this regex is not always suitable in a real-life situation. It is too simple and covers only a few cases.</p>
+<h5 id="phone-numbers" style="text-align: center;">Phone numbers</h5>
+<p>In previous topics, we briefly looked at some regular expressions for phone numbers. In the following example, we will compile a slightly different regex. For simplicity, let's assume that phone numbers can be written in one of the following formats: <strong>XXX-XXX-XXXX</strong>, <strong>(XXX)-XXX-XXXX</strong>, <strong>(XXX)XXXXXXX</strong>, and <strong>XXXXXXXXXX</strong>.</p>
+<p>Look at the following regular expression:</p>
+<pre><code class="language-no-highlight">\(?[\d]{3}\)?-?[\d]{3}-?[\d]{4}</code></pre>
+<p>What's going on here?</p>
+<ul>
+<li><strong>Section 1</strong> <code class="language-kotlin">\(?[\d]{3}\)?-?</code> matches the first three digits, possible brackets, and a delimiter.</li>
+<li><strong>Section 2</strong> <code class="language-kotlin">[\d]{3}-?</code> looks for the next three digits and a possible delimiter.</li>
+<li>Finally, in <strong>section 3</strong> <code class="language-kotlin">[\d]{4}</code> we match the last four digits.</li>
+</ul>
+<p>Let's check how it works:</p>
+<pre><code class="language-kotlin">val regex = Regex("""\(?[\d]{3}\)?-?[\d]{3}-?[\d]{4}""")
+val phones = regex.findAll("Ann's phone: 123-345-6789 " +
+        "Dave's phone: (111)-234-5678, and next phone is (101)-234-5000")
+
+for (phone in phones) println(phone.value)</code></pre>
+<p>This code will print the following:</p>
+<pre><code class="language-no-highlight">123-345-6789
+(111)-234-5678
+(101)-234-5000</code></pre>
+<p>Great! The following examples will be more complex and universal.</p>
+<h5 id="email" style="text-align: center;">Email</h5>
+<p>Let's imagine that you need to find all the email addresses that appear in a text. The rules for composing emails are regulated by <a href="https://datatracker.ietf.org/doc/html/rfc5322" rel="noopener noreferrer nofollow" target="_blank">RFC 5322</a>. A standard email address looks like "login@subdomain.domain". The following regular expression will match most of the email addresses compiled according to these rules:</p>
+<pre><code class="language-no-highlight">([a-z0-9_\.-]+)@([a-z0-9_\.-]+)\.([a-z\.]{2,6})</code></pre>
+<p>It looks rather long and somewhat incomprehensible, doesn't it? Let's take a closer look at what it consists of. The parts of the regular expression work like this:</p>
+<ul>
+<li>In<strong> group 1</strong> <code class="language-kotlin">([a-z0-9_\.-]+)</code>  we match one or more lowercase letters between a–z, numbers between 0–9, underscores, periods, and hyphens. Then there goes the <code class="language-kotlin">@</code> sign in the email address, which ends this group.</li>
+<li><strong>Group 2</strong> <code class="language-kotlin">([a-z0-9_\.-]+)</code> is very similar to the previous one: the subdomain name may consist of the same kinds of symbols. It is followed by a period <code class="language-kotlin">\.</code>.</li>
+<li><strong>Group 3</strong> <code class="language-kotlin">([a-z\.]{2,6})</code> matches the top level domain: any group of letters or dots of length from 2 to 6 characters.</li>
+</ul>
+<p>Let's check how it all works:</p>
+<pre><code class="language-kotlin">val regex = Regex("""([a-z0-9_\.-]+)@([a-z0-9_\.-]+)\.([a-z\.]{2,6})""")
+val matchResult = regex.findAll("We have the following emails: " +
+        "abc@mail.com, joe_blow@address.ing")
+
+for (matches in matchResult) println(matches.value)</code></pre>
+<p>The result of executing the above piece of code is as follows:</p>
+<pre><code class="language-no-highlight">abc@mail.com
+joe_blow@address.ing</code></pre>
+<h5 id="url" style="text-align: center;">URL</h5>
+<p>Searching and copying links from a text manually can be tedious. But we won't have to do that!</p>
+<p>A typical URL may look like <code class="language-kotlin"><a href="http://www.example.com/index.html" rel="noopener noreferrer nofollow" target="_blank">https://www.somesite.com/index.html</a></code>. Below is a regular expression that matches the pattern:</p>
+<pre><code class="language-no-highlight">(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.-]*)*\/?</code></pre>
+<p>Let 's analyze it in more detail, group by group:</p>
+<ul>
+<li><strong>Group 1</strong> <code class="language-kotlin">(https?:\/\/)?</code> corresponds to the first optional part of a URL. It includes the letters "http", possibly "s", a colon, and two slashes.</li>
+<li><strong>Groups 2 and 3</strong> <code class="language-kotlin">([\da-z\.-]+)\.([a-z\.]{2,6})</code> match a sequence of letters, numbers, hyphens, underscores, and dots (domains and the zero-level domain – from 2 to 6 characters and dots).</li>
+<li>And <strong>group 4</strong> <code class="language-kotlin">([\/\w\.-]*)*</code> is needed to identify the file: a set of words composed of letters, numbers, hyphens, underscores, and dots with a slash at the end. Finally, it may be followed by a slash.</li>
+</ul>
+<p>The example below shows a possible use of this regular expression:</p>
+<pre><code class="language-kotlin">val regex = Regex("""(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.-]*)*\/?""")
+val matchResult = regex.findAll("Jet Brains Website: https://www.jetbrains.com/ " +
+        "And here is information about Hyperskill: https://hi.hyperskill.org/how-we-teach")
+
+for (matches in matchResult) println(matches.value)</code></pre>
+<p>The result of executing the above piece of code is as follows:</p>
+<pre><code class="language-no-highlight">https://www.jetbrains.com/
+https://hi.hyperskill.org/how-we-teach</code></pre>
+<h5 id="conclusion" style="text-align: center;">Conclusion</h5>
+<p>In this topic, we have considered some practical examples of using regexes of varying complexity. Step by step, we have discussed relatively simple regexes for dates and phone numbers, as well as more complex and universal ones for URLs and email addresses.</p>
+<p>The acquired skills will help you both in the following tasks and in your future projects. </p>
+</div>

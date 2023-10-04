@@ -1,0 +1,21 @@
+type: choice
+is_multiple_choice: false
+options:
+  - text: 1 or more repetitions of the previous group
+  - text: Either 1 or 0 repetitions of the previous group
+  - text: With \1 we refer to the first group in the regex
+  - text: "1 is a special character, here we escape it"
+files:
+  - name: src/Main.kt
+    visible: true
+    text: |
+      // You can experiment here, it won’t be checked
+      
+      fun main(args: Array<String>) {
+        // put your code here
+      }
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/20661#comment
+status: Solved
+record: -1
+local_check: false
