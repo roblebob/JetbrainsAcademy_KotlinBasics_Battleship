@@ -101,8 +101,14 @@
             <option value="$PROJECT_DIR$/Topics/Set/First things first" />
             <option value="$PROJECT_DIR$/Topics/Set/Subtraction" />
             <option value="$PROJECT_DIR$/Topics/Set/Theory" />
+            <option value="$PROJECT_DIR$/Topics/String formatting/Correct printout" />
+            <option value="$PROJECT_DIR$/Topics/String formatting/Dynamic Double formatting" />
             <option value="$PROJECT_DIR$/Topics/String formatting/Format Double with a comma and 2 decimal digits" />
+            <option value="$PROJECT_DIR$/Topics/String formatting/Format String" />
+            <option value="$PROJECT_DIR$/Topics/String formatting/Integer format string" />
+            <option value="$PROJECT_DIR$/Topics/String formatting/Matching specifier with type" />
             <option value="$PROJECT_DIR$/Topics/String formatting/Theory" />
+            <option value="$PROJECT_DIR$/Topics/String formatting/Valid format specifiers" />
             <option value="$PROJECT_DIR$/Topics/Test predicates  checking elements in collection/Is it a palindrome list" />
             <option value="$PROJECT_DIR$/Topics/Test predicates  checking elements in collection/Theory" />
             <option value="$PROJECT_DIR$/Topics/Type Bounds/Checking mailbox" />

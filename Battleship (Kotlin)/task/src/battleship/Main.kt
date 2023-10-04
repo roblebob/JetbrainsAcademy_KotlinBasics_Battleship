@@ -13,6 +13,11 @@ val SHIPS = mapOf(
 
 val PLAYERS  = listOf("Player 1", "Player 2")
 
+
+
+
+
+
 fun main() {
 
     Field.placeShips()
@@ -64,21 +69,17 @@ fun main() {
 
                             if (Field.ledgerIsEmpty(theOtherPlayer)) {
                                 println("\nYou sank the last ship. You won. Congratulations!\n")
-                                break@inner
-                            }
-                            if (pSet.isEmpty()) {
+
+                            } else if (pSet.isEmpty()) {
                                 println("\nYou sank a ship!\n")
-                                continue@inner
+                            } else {
+                                println("\nYou hit a ship!\n")
                             }
-
-                            println("\nYou hit a ship!\n")
-                            break@inner
                         }
-
                     }
+                } else {
+                    println("\nYou missed!\n")
                 }
-
-                println("\nYou missed!\n")
                 break@inner
             }
         }
